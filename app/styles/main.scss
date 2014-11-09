@@ -1,0 +1,17 @@
+@import "compass/css3";
+@import "../modules/portfolio/style/porfolio";
+html,body{
+  margin: 0;
+  padding: 0;
+}
+body {
+
+  >[ng-view] {
+    margin: 0 1.5em;
+    @import "../modules/start/style/start";
+  }
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

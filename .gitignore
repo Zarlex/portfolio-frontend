@@ -1,0 +1,10 @@
+.tmp
+.sass-cache
+.DS_Store
+.idea
+
+node_modules
+dist
+app/components
+app/modules/zx_canvas/dist
+app/modules/zx_bvackbone/dist
