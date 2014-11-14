@@ -28,7 +28,7 @@
                     },
                     all: [
                         'Gruntfile.js',
-                        '<%= yeoman.app %>/modules/**/{,*/}*.js',
+                        '<%= yeoman.app %>/**/{,*/}*.js',
                         'spec/**/{,*/}*.js'
                     ]
                 },
