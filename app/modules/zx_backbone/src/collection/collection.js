@@ -5,4 +5,4 @@ var Collection = Backbone.Collection.extend({
 
 });
 
-zxBackbone.zxCollection = Collection;
+zxBackbone.Collection = Collection;
