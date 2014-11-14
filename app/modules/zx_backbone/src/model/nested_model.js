@@ -6,7 +6,7 @@ var NestedModel = zxBackbone.Model.extend({
 
     constructor: function(attributes, options){
         var attrs = attributes || {},
-            nested = {};
+            nested = this._prepare();
 
         options = options || {};
         this.cid = _.uniqueId('c');
@@ -14,7 +14,7 @@ var NestedModel = zxBackbone.Model.extend({
         if (options.collection) {
             this.collection = options.collection;
         }
-        nested = this._prepare();
+
         this.set(nested);
         if (options.parse) {
             attrs = this.parse(attrs, options) || {};
@@ -27,6 +27,53 @@ var NestedModel = zxBackbone.Model.extend({
 
     nested: function(){
         return {};
+    },
+
+    set: function(attributes,options){
+        var obj = {};
+
+        if(attributes instanceof Object){
+            obj = attributes;
+        } else if(typeof attributes === 'string'){
+            obj[attributes] = options;
+        }
+
+        obj = this._setNestedAttributes(obj);
+
+        zxBackbone.Model.prototype.set.call(this,obj);
+    },
+
+    _setNestedModel: function(key,value){
+        if(typeof value === 'string'){
+            var id = this.get(key).idAttribute;
+            this.get(key).set(id,value);
+        }
+    },
+
+    _setNestedCollection: function(key,value){
+
+    },
+
+    _setNestedAttributes: function(obj){
+
+        for (var key in obj){
+            var nestedAttrs = this.nested(),
+                value = obj[key],
+                nestedValue = nestedAttrs[key];
+
+            if(nestedValue && !(value instanceof nestedValue) && this.get(key)){
+
+                if(this.get(key) instanceof Backbone.Model){
+                    this._setNestedModel(key,value);
+                } else if (this.get(key) instanceof Backbone.Collection){
+                    this._setNestedCollection(key,value);
+                }
+
+                delete obj[key];
+            }
+        }
+
+        return obj;
     },
 
     _bindNestedEventListener: function(attribute,nestedInstance){
@@ -73,10 +120,11 @@ var Test = NestedModel.extend({
 });
 
 var test = new Test();
-test.on('change:test2:add',function(){
+test.on('change:name',function(){
    debugger;
 });
-//test.set('name','jo');
+test.set('test','jo');
+debugger;
 //test.get('test').set('name','JO');
 
-test.get('test2').add({key: 'NOI'});
+//test.get('test2').add({key: 'NOI'});
