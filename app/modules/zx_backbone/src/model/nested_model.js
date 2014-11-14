@@ -44,14 +44,23 @@ var NestedModel = zxBackbone.Model.extend({
     },
 
     _setNestedModel: function(key,value){
-        if(typeof value === 'string'){
+        if(_.isString(value)){
             var id = this.get(key).idAttribute;
             this.get(key).set(id,value);
+        } else if(_.isObject(value)){
+            this.get(key).set(value);
         }
     },
 
     _setNestedCollection: function(key,value){
-
+        if(_.isString(value)){
+            var id = this.get(key).model.prototype.idAttribute,
+                obj = {};
+            obj[id]=value;
+            this.get(key).add(obj);
+        } else if(_.isObject(value)){
+            this.get(key).add(value);
+        }
     },
 
     _setNestedAttributes: function(obj){
@@ -76,30 +85,43 @@ var NestedModel = zxBackbone.Model.extend({
         return obj;
     },
 
-    _bindNestedEventListener: function(attribute,nestedInstance){
-        nestedInstance.on('all', function(eventName,model,nestedAttribute){
-            var newEventName = '';
-            if(eventName.match(/change:?/) ){
-                var nestedAttributeName = eventName.replace(/change:?/,''),
-                    newEventNameArr = ['change',attribute,nestedAttributeName];
-
-                newEventName = _.compact(newEventNameArr).join(':');
-                this.trigger.apply(this,[newEventName,model,nestedAttribute]);
-                this.trigger.apply(this,['change',model,nestedAttribute]);
-            } else if(eventName.match(/add|remove/)){
-                newEventName = 'change:'+attribute;
-                this.trigger.apply(this,[newEventName,model,nestedAttribute]);
-                this.trigger.apply(this,[newEventName+':'+eventName,model,nestedAttribute]);
-                this.trigger.apply(this,['change',model,nestedAttribute]);
+    _bindNestedModelListener: function (attribute, nestedModel) {
+        nestedModel.on('change', function (model) {
+            var changedAttributes = model.changedAttributes();
+            for(var attrName in changedAttributes){
+                this.trigger.call(this, 'change:'+attribute+':'+attrName, model);
             }
-        },this);
+            this.trigger('change:'+attribute,model);
+            this.trigger('change',model);
+        }, this);
+    },
+
+    _bindNestedCollectionListener: function (attribute, nestedCollection) {
+        nestedCollection.on('add remove', function(model,collection,opts){
+            if(opts.add){
+                this.trigger('change:'+attribute+':add',model,collection,opts);
+            } else if( opts.remove){
+                this.trigger('change:'+attribute+':remove',model,collection,opts);
+            }
+            this.trigger('change:'+attribute,model,collection,opts);
+            this.trigger('change',model,collection,opts);
+        }, this);
+    },
+
+    _bindNestedEventListener: function (attribute, nestedInstance) {
+
+        if (nestedInstance instanceof Backbone.Model) {
+            this._bindNestedModelListener(attribute, nestedInstance);
+        } else if (nestedInstance instanceof Backbone.Collection) {
+            this._bindNestedCollectionListener(attribute, nestedInstance);
+        }
     },
 
     _prepare: function () {
         var nestedAttributes = this.nested(),
             instanceObject = {};
         for(var key in nestedAttributes){
-            var instance = new nestedAttributes[key];
+            var instance = new nestedAttributes[key]();
             instanceObject[key] = instance;
             this._bindNestedEventListener(key,instance);
         }
@@ -110,21 +132,4 @@ var NestedModel = zxBackbone.Model.extend({
 
 zxBackbone.NestedModel = NestedModel;
 
-var Test = NestedModel.extend({
-   nested: function(){
-       return {
-           test: Backbone.Model,
-           test2: Backbone.Collection
-       };
-   }
-});
 
-var test = new Test();
-test.on('change:name',function(){
-   debugger;
-});
-test.set('test','jo');
-debugger;
-//test.get('test').set('name','JO');
-
-//test.get('test2').add({key: 'NOI'});
