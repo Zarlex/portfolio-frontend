@@ -15,12 +15,17 @@
                    var canvas = new zxCanvas.Canvas({el:el});
 
                     var layer = canvas.createPolygonLayer();
+                    var layer2 = canvas.createPolygonLayer();
                     var polygon = new zxCanvas.Polygon({coordinates: [{x:0,y:0},{x:200,y:0},{x:200,y:200},{x:0,y:200}], color:{red:255,blue:0,green:0}});
-                    layer.get('polygons').add(polygon);
+                    var polygon2 = new zxCanvas.Polygon({coordinates: [{x:200,y:0},{x:400,y:0},{x:400,y:200},{x:200,y:200}], color:{red:255,blue:0,green:255}});
 
-                    layer.on('change:image',function(layer){
-                        canvas.getContext().putImageData(layer.get('image'),0,0);
-                    },this);
+                    layer.get('polygons').add(polygon);
+                    layer2.get('polygons').add(polygon2);
+
+
+                    setTimeout(function(){
+                        polygon.set('color',{red:0,blue:255,green:0});
+                    },1000);
                 }
             };
         });
