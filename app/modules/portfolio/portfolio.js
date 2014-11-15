@@ -35,6 +35,8 @@
 
       $routeProvider.otherwise({redirectTo: '/start'});
 
+      Backbone.$ = angular.element;
+
     }])
 
     .run([
