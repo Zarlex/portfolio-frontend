@@ -1,39 +1,37 @@
 /**
- * Created by zarges on 05.11.14.
+ * Created by zarges on 14.11.14.
  */
 
-var Polygon = zxBackbone.NestedModel.extend({
+var Polygons = zxBackbone.Collection.extend({
 
-    nested: function () {
-        return {
-            coordinates: zxCanvas.Coordinates,
-            color: zxCanvas.Color
-        }
-    },
+    model: zxCanvas.Polygon,
 
-    render: function (context) {
-        var coordinates = this.get('coordinates').toJSON(),
-            startEndPoint = coordinates.splice(0,1),
-            color = this.get('color').toHexString();
+    getRenderRectangle: function(){
+        var polygons = this.toJSON(),
+            xCoordinates = [],
+            yCoordinates = [],
+            startX, startY, endX, endY, width, height;
 
-        context.fillStyle = color;
-
-        context.beginPath();
-        context.moveTo(startEndPoint.get('x'), startEndPoint.get('y'));
-
-        coordinates.forEach(function (coordinate) {
-            context.lineTo(coordinate.get('x'), coordinate.get('y'));
+        polygons.forEach(function(polygon){
+            polygon.coordinates.forEach(function(coordinate){
+                xCoordinates.push(coordinate.get('x'));
+                yCoordinates.push(coordinate.get('y'));
+            });
         });
 
-        context.lineTo(startEndPoint.get('x'), startEndPoint.get('y'));
+        xCoordinates = xCoordinates.sort();
+        yCoordinates = yCoordinates.sort();
 
-        context.closePath();
-        context.fill();
-        return this;
+        startX = xCoordinates[0];
+        startY = yCoordinates[0];
+        endX = xCoordinates[xCoordinates.length-1];
+        endY = yCoordinates[yCoordinates.length-1];
+        width = endX - startX;
+        height = endY - startY;
+
+        return [startX, startY,width,height];
     }
 
 });
 
-zxCanvas.Polygon = Polygon;
-
-debugger;
+zxCanvas.Polygons = Polygons;
