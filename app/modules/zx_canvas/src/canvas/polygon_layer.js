@@ -8,7 +8,8 @@ var PolygonLayer = zxBackbone.NestedModel.extend({
         return {
             globalCompositeOperation: 'source-over',
             image: null,
-            canvas: null
+            canvas: null,
+            rendering: false
         }
     },
 
@@ -18,7 +19,7 @@ var PolygonLayer = zxBackbone.NestedModel.extend({
         }
     },
 
-    getRenderRectangle: function(){
+    getRenderRectangle: function () {
         return this.get('polygons').getRenderRectangle();
     },
 
@@ -26,20 +27,30 @@ var PolygonLayer = zxBackbone.NestedModel.extend({
         var context = this.get('canvas').getContext('2d'),
             renderRectangle = this.getRenderRectangle();
 
-        context.clearRect.apply(context,renderRectangle);
+        context.clearRect.apply(context, renderRectangle);
 
-        this.get('polygons').forEach(function(polygon){
+        this.get('polygons').forEach(function (polygon) {
             polygon.render(context);
         }, this);
 
-        this.set(image,context.getImageData())
+        this.set('image',context.getImageData.apply(context,renderRectangle));
+
+        this.set('rendering', false);
     },
 
     initialize: function () {
 
-        this.on('change:globalCompositeOperation change:polygons', function () {
-            window.requestAnimationFrame(this.render);
-        },this);
+        this.on('add remove change:globalCompositeOperation change:polygons', function () {
+            var self = this;
+            if (!this.get('rendering')) {
+                this.set('rendering', true);
+                window.requestAnimationFrame(function () {
+                    self.render();
+                    self.set('rendering', false);
+                });
+            }
+
+        }, this);
     }
 });
 
