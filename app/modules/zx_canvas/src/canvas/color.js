@@ -12,11 +12,20 @@ var Color = zxBackbone.Model.extend({
         }
     },
 
+    _colorToHexString: function(color){
+        var hex = color.toString(16);
+        if(hex.length===1){
+            return '0'+hex;
+        } else {
+            return hex;
+        }
+    },
+
     toHexString: function () {
         return '#' +
-            this.get('red').toString(16) +
-            this.get('green').toString(16) +
-            this.get('blue').toString(16);
+            this._colorToHexString(this.get('red')) +
+            this._colorToHexString(this.get('green')) +
+            this._colorToHexString(this.get('blue'));
     },
 
     toRgbString: function () {
