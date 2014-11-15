@@ -32,10 +32,10 @@ var NestedModel = zxBackbone.Model.extend({
     set: function(attributes,options){
         var obj = {};
 
-        if(attributes instanceof Object){
-            obj = attributes;
-        } else if(typeof attributes === 'string'){
+        if(_.isString(attributes)){
             obj[attributes] = options;
+        } else if(_.isObject(attributes)){
+            obj = attributes;
         }
 
         obj = this._setNestedAttributes(obj);
