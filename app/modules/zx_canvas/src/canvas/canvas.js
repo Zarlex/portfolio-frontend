@@ -2,71 +2,26 @@
  * Created by zarges on 05.11.14.
  */
 
-var Canvas = function (canvasEl) {
-    var _canvas = canvasEl,
-        _context = _canvas.getContext('2d'),
-        _registeredElements = [],
-        _renderQueue = [];
+var Canvas = Backbone.View.extend({
 
-    this.addToRenderQueue = function (el) {
-        _renderQueue.push(el);
-    };
+    el: 'canvas',
 
-    this.registerPolygon = function (polygon, index) {
+    _layers: new Backbone.Collection(),
 
-        if (!polygon instanceof zxCanvas.Polygon) {
-            throw new Error('Element is not a polygon');
-        }
+    getContext: function(){
+      return this.el.getContext('2d');
+    },
 
-        polygon._canvas = this;
+    createPolygonLayer: function () {
+        var layerId = _.uniqueId('layer_'),
+            canvas = Backbone.$('<canvas id="' + layerId + '"></canvas>'),
+            layer = new zxCanvas.PolygonLayer({id: layerId, canvas: canvas[0]});
 
-        if (!index) {
-            _registeredElements.push(polygon);
-        } else {
+        this.$el.append(canvas);
 
-        }
+        return this._layers.add(layer);
+    }
 
-        _renderQueue.push(polygon);
-    };
-
-    this.getContext = function () {
-        return _context;
-    };
-
-    var getClearRectangle = function () {
-        var xCoordinates = [],
-            yCoordinates = [];
-        _renderQueue.forEach(function(renderEl){
-            xCoordinates.push(renderEl.getStartEndCoordinate().getX());
-            xCoordinates.push(renderEl.getXCoordinates());
-            yCoordinates.push(renderEl.getStartEndCoordinate().getY());
-            yCoordinates.push(renderEl.getYCoordinates());
-        });
-        xCoordinates = _.flatten(xCoordinates).sort();
-        yCoordinates = _.flatten(yCoordinates).sort();
-        return [xCoordinates[0],yCoordinates[0],xCoordinates[xCoordinates.length-1]-xCoordinates[0],yCoordinates[yCoordinates.length-1]-yCoordinates[0]];
-    };
-
-    var render = function () {
-        if (_renderQueue.length > 0) {
-            var clearRectangle = getClearRectangle();
-            _context.clearRect.apply(_context,clearRectangle);
-
-            _registeredElements.forEach(function (el) {
-                _context.save();
-                el.render();
-                _context.restore();
-            });
-            _renderQueue = [];
-        }
-        window.requestAnimationFrame(render);
-    };
-
-    (function main() {
-        render();
-    })();
-
-
-};
+});
 
 zxCanvas.Canvas = Canvas;
