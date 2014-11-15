@@ -12,39 +12,15 @@
                 },
                 link: function (scope, el) {
 
-                   var canvas = new zxCanvas.Canvas(el[0]),
-                       background = new zxCanvas.Polygon([
-                           new zxCanvas.Coordinate(0,0),
-                           new zxCanvas.Coordinate(0,400),
-                           new zxCanvas.Coordinate(800,400),
-                           new zxCanvas.Coordinate(800,0)
-                       ],{color:new zxCanvas.Color('rgba(255,0,255,0.5')}),
-                       rectangle = new zxCanvas.Polygon([
-                           new zxCanvas.Coordinate(0,0),
-                           new zxCanvas.Coordinate(0,200),
-                           new zxCanvas.Coordinate(200,200),
-                           new zxCanvas.Coordinate(200,0)
-                       ]),
-                       rectangle1 = new zxCanvas.Polygon([
-                           new zxCanvas.Coordinate(200,0),
-                           new zxCanvas.Coordinate(200,200),
-                           new zxCanvas.Coordinate(400,200),
-                           new zxCanvas.Coordinate(400,0)
-                       ]),
-                       rectangle2 = new zxCanvas.Polygon([
-                           new zxCanvas.Coordinate(400,0),
-                           new zxCanvas.Coordinate(400,200),
-                           new zxCanvas.Coordinate(600,200),
-                           new zxCanvas.Coordinate(600,0)
-                       ],{color: new zxCanvas.Color('yellow')});
-                    //canvas.registerPolygon(background);
-                    canvas.registerPolygon(rectangle);
-                    canvas.registerPolygon(rectangle1);
-                    canvas.registerPolygon(rectangle2);
+                   var canvas = new zxCanvas.Canvas({el:el});
 
-                    setTimeout(function(){
-                        rectangle2.setColor(new zxCanvas.Color('rgba(255,255,255,0'));
-                    },1000)
+                    var layer = canvas.createPolygonLayer();
+                    var polygon = new zxCanvas.Polygon({coordinates: [{x:0,y:0},{x:200,y:0},{x:200,y:200},{x:0,y:200}], color:{red:255,blue:0,green:0}});
+                    layer.get('polygons').add(polygon);
+
+                    layer.on('change:image',function(layer){
+                        canvas.getContext().putImageData(layer.get('image'),0,0);
+                    },this);
                 }
             };
         });
