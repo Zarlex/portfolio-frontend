@@ -1,17 +1,9 @@
 /**
- * Created by zarges on 05.11.14.
+ * Created by zarges on 14.11.14.
  */
-var Coordinate = Backbone.Model.extend({
-    defaults: function(){
-        return {
-            x: 0,
-            y: 0
-        }
-    },
 
-    toString: function(){
-        return this.get('x')+''+this.get('y');
-    }
+var Coordinates = zxBackbone.Collection.extend({
+    model: zxCanvas.Coordinate
 });
 
-zxCanvas.Coordinate = Coordinate;
+zxCanvas.Coordinates = Coordinates;
