@@ -97,7 +97,8 @@ var NestedModel = zxBackbone.Model.extend({
     },
 
     _bindNestedCollectionListener: function (attribute, nestedCollection) {
-        nestedCollection.on('add remove', function(model,collection,opts){
+        nestedCollection.on('add remove change', function(model,collection,opts){
+            opts = opts || {};
             if(opts.add){
                 this.trigger('change:'+attribute+':add',model,collection,opts);
             } else if( opts.remove){
