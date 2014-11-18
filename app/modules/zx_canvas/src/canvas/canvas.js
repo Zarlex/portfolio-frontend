@@ -57,13 +57,12 @@ var Canvas = Backbone.View.extend({
 
     prepareToRender: function () {
         var rendering = this.attributes.get('rendering');
-        if (this._layersAreReadyToRender() && !rendering) {
-            this.attributes.set('rendering',true);
+        if (this._layersAreReadyToRender()) {
             this.render();
             this.attributes.set('rendering',false);
         } else if (!rendering) {
             var self = this;
-
+            this.attributes.set('rendering',true);
             window.requestAnimationFrame(function () {
                 self.prepareToRender();
             });
@@ -115,8 +114,6 @@ var Canvas = Backbone.View.extend({
         this.el.height = height;
 
         this.attributes.get('layers').setSize(width, height);
-
-        this.prepareToRender();
     },
 
     constructor: function(){
