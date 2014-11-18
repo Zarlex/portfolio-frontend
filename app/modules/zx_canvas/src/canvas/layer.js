@@ -7,7 +7,9 @@ var Layer = zxBackbone.NestedModel.extend({
         return {
             globalCompositeOperation: 'source-over',
             canvas: null,
-            rendering: false
+            rendering: false,
+            width: null,
+            height: null
         }
     },
 
@@ -35,6 +37,18 @@ var Layer = zxBackbone.NestedModel.extend({
                 self.set('rendering', false);
             });
         }
+    },
+
+    _setSize: function(){
+        this.get('canvas').width = this.get('height');
+        this.get('canvas').height = this.get('width');
+        this.prepareToRender();
+    },
+
+    constructor: function(){
+        var constructor = zxBackbone.NestedModel.prototype.constructor.apply(this,arguments);
+        this.on('change:width change:height', this._setSize, this);
+        return constructor;
     }
 });
 
