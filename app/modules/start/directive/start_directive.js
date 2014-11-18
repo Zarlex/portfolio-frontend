@@ -6,7 +6,7 @@
         .directive('zxCanvas', function ($http) {
             return {
                 replace: true,
-                template: '<canvas style="position: absolute; left: -90px;top:-90px;" width="3630" height="3630"></canvas>', //Width && Height = (row or col amount-1 * diamond width or height)-(diamond width or height)/2
+                template: '<canvas style="position: absolute; left: -90px;top:-90px;" width="200" height="200"></canvas>', //Width && Height = (row or col amount-1 * diamond width or height)-(diamond width or height)/2
                 scope: {
                     opacity: '='
                 },
@@ -33,6 +33,7 @@
 
                     setTimeout(function(){
                         layer.set('globalCompositeOperation','screen');
+                        canvas.attributes.set({width:800,height:800});
                     },2000);
                 }
             };
