@@ -8,39 +8,53 @@ var ImageLayer = zxCanvas.Layer.extend({
         return _.extend(defaults,{
             src: null,
             rendering: false,
-            imageInstance: new Image()
+            syncron: false,
+            imageInstance: new Image(),
+            imageLaoded: false
         });
     },
 
     getRenderRectangle: function () {
-        return [0,0,500,500];
+        var img = this.get('imageInstance');
+        return [0,0,img.width,img.height];
     },
 
     render: function (img) {
         var context = this.get('canvas').getContext('2d'),
             renderRectangle = this.getRenderRectangle();
-
+        console.log('loaded img')
         context.clearRect.apply(context, renderRectangle);
-        context.drawImage(img, renderRectangle[0], renderRectangle[1], renderRectangle[2], renderRectangle[3]);
+        context.drawImage(this.get('imageInstance'), renderRectangle[0], renderRectangle[1], renderRectangle[2], renderRectangle[3]);
     },
 
     prepareToRender: function(){
         var self = this,
             imageInstance = this.get('imageInstance');
 
-        this.set('rendering',true);
+        this.set('rendering',this.get('syncron'));
         imageInstance.src = this.get('src');
-        imageInstance.onload = function(){
+
+        if(this.get('imageLoaded')){
+            self.set('rendering',true);
             self.render(this);
             self.set('rendering',false);
-        };
+        } else {
+            imageInstance.onload = function(){
+                self.set('imageLoaded',true);
+                self.set('rendering',true);
+                self.render(this);
+                self.set('rendering',false);
+            };
+        }
     },
 
     constructor: function () {
-        zxCanvas.Layer.prototype.constructor.apply(this,arguments);
+        var constructor = zxCanvas.Layer.prototype.constructor.apply(this,arguments);
         this.on('change:src', function () {
+            this.set('imageLoaded',false);
             this.prepareToRender();
         }, this);
+        return constructor;
     }
 });
 
