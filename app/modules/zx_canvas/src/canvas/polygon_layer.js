@@ -2,21 +2,13 @@
  * Created by zarges on 14.11.14.
  */
 
-var PolygonLayer = zxBackbone.NestedModel.extend({
-
-    defaults: function () {
-        return {
-            globalCompositeOperation: 'source-over',
-            image: null,
-            canvas: null,
-            rendering: false
-        }
-    },
+var PolygonLayer = zxCanvas.Layer.extend({
 
     nested: function () {
-        return {
+        var nested = zxCanvas.Layer.prototype.nested.apply(this,arguments);
+        return _.extend(nested,{
             polygons: zxCanvas.Polygons
-        }
+        });
     },
 
     getRenderRectangle: function () {
@@ -32,24 +24,13 @@ var PolygonLayer = zxBackbone.NestedModel.extend({
         this.get('polygons').forEach(function (polygon) {
             polygon.render(context);
         }, this);
-
-        this.set('image',context.getImageData.apply(context,renderRectangle));
-
-        this.set('rendering', false);
     },
 
-    initialize: function () {
+    constructor: function () {
 
-        this.on('add remove change:globalCompositeOperation change:polygons', function () {
-            var self = this;
-            if (!this.get('rendering')) {
-                this.set('rendering', true);
-                window.requestAnimationFrame(function () {
-                    self.render();
-                    self.set('rendering', false);
-                });
-            }
-
+        zxCanvas.Layer.prototype.constructor.apply(this,arguments);
+        this.on('add remove change:polygons', function () {
+            this.prepareToRender();
         }, this);
     }
 });
