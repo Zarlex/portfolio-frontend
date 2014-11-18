@@ -9,7 +9,9 @@
     // @include ./canvas/color.js
     // @include ./canvas/polygon.js
     // @include ./canvas/polygons.js
+    // @include ./canvas/layer.js
     // @include ./canvas/polygon_layer.js
+    // @include ./canvas/image_layer.js
 
     // @include ./diamonds/diamond.js
 
