@@ -13,19 +13,27 @@
                 link: function (scope, el) {
 
                    var canvas = new zxCanvas.Canvas({el:el});
-
-                    var layer = canvas.createPolygonLayer();
-                    var layer2 = canvas.createPolygonLayer();
-                    var polygon = new zxCanvas.Polygon({coordinates: [{x:0,y:0},{x:200,y:0},{x:200,y:200},{x:0,y:200}], color:{red:255,blue:0,green:0}});
+//
+                    var layer = canvas.createPolygonLayer(100);
+                    var layer2 = canvas.createPolygonLayer(20);
+                    var layer2b = canvas.createPolygonLayer(30);
+                    var layer3 = canvas.createImageLayer(4);
+                    var polygon = new zxCanvas.Polygon({coordinates: [{x:0,y:0},{x:300,y:0},{x:100,y:500},{x:0,y:200}], color:{red:144,blue:144,green:144}});
                     var polygon2 = new zxCanvas.Polygon({coordinates: [{x:200,y:0},{x:400,y:0},{x:400,y:200},{x:200,y:200}], color:{red:255,blue:0,green:255}});
+                    var polygon3 = new zxCanvas.Polygon({coordinates: [{x:200,y:200},{x:400,y:200},{x:400,y:400},{x:200,y:400}], color:{red:255,blue:0,green:255}});
 
                     layer.get('polygons').add(polygon);
                     layer2.get('polygons').add(polygon2);
+                    layer2b.get('polygons').add(polygon3);
+
+                    layer3.set('src','/modules/start/images/southside.jpg');
+
+                    window.polygon2 = polygon2;
 
 
                     setTimeout(function(){
-                        polygon.set('color',{red:0,blue:255,green:0});
-                    },1000);
+                        layer.set('globalCompositeOperation','screen');
+                    },2000);
                 }
             };
         });
