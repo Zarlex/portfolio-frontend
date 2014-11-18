@@ -7,13 +7,15 @@ var Canvas = Backbone.View.extend({
     _layers: new (Backbone.Collection.extend({
         comparator: 'zIndex',
         lastZIndex: 0
-    })) (),
+    }))(),
 
-    _layersAreReadyToRender: function(){
+    _rendering: false,
+
+    _layersAreReadyToRender: function () {
         var layers = this.getLayers(),
             ready = true;
-        layers.forEach(function(layer){
-            if(!layer.get('image') || layer.get('rendering') ){
+        layers.forEach(function (layer) {
+            if (layer.get('rendering')) {
                 ready = false;
             }
         });
@@ -22,46 +24,73 @@ var Canvas = Backbone.View.extend({
 
     el: 'canvas',
 
-    getContext: function(){
-      return this.el.getContext('2d');
+    getContext: function () {
+        return this.el.getContext('2d');
     },
 
-    getLayers: function(){
+    getLayers: function () {
         return this._layers;
     },
 
-    render: function(){
-        if(this._layersAreReadyToRender()){
-            var layers = this.getLayers();
-            layers.forEach(function(layer){
+    getRenderRectangle: function () {
+
+    },
+
+    render: function () {
+        var layers = this.getLayers(),
+            context = this.getContext(),
+            startCanvas = +new Date();
+        console.log('Start Rendering Canvas');
+        context.clearRect.apply(context, [0, 0, 500, 500]);
+        layers.forEach(function (layer) {
                 var context = this.getContext(),
                     renderRectangle = layer.getRenderRectangle();
                 context.save();
                 context.globalCompositeOperation = layer.get('globalCompositeOperation');
-                context.putImageData(layer.get('image'),renderRectangle[0],renderRectangle[1]);
+                console.log(layer.get('globalCompositeOperation'));
+                context.drawImage(layer.get('canvas'), renderRectangle[0], renderRectangle[1]);
                 context.restore();
-            },this);
-        } else {
+        }, this);
+        console.log('Finished Rendering Canvas', (+new Date()) - startCanvas);
+    },
+
+    prepareToRender: function () {
+        if (this._layersAreReadyToRender() && !this._rendering) {
+            this._rendering = true;
+            this.render();
+            this._rendering = false;
+        } else if (!this._rendering) {
             var self = this;
-            window.requestAnimationFrame(function(){
+
+            this._rendering = true;
+            window.requestAnimationFrame(function () {
                 self.render();
+                self._rendering = false;
             });
         }
     },
 
-    createPolygonLayer: function (zIndex) {
-        zIndex = zIndex || (this._layers.lastZIndex += 1);
-        var layerId = _.uniqueId('layer_'),
-            canvas = Backbone.$('<canvas id="' + layerId + '"></canvas>'),
-            layer = new zxCanvas.PolygonLayer({id: layerId, canvas: canvas[0],zIndex: zIndex});
+    createLayer: function (Layer, zIndex) {
+        var zIndex = zIndex || (this._layers.lastZIndex += 1),
+            layerId = _.uniqueId('layer_'),
+            canvas = Backbone.$('<canvas id="' + layerId + '" width="500px" height="500px"></canvas>'),
+            layer = new Layer({id: layerId, canvas: canvas[0], zIndex: zIndex});
 
         this.$el.append(canvas);
 
-        layer.on('change:image', function(){
-            this.render();
-        },this);
+        layer.on('change:rendering change:globalCompositeOperation', function () {
+            this.prepareToRender();
+        }, this);
 
         return this._layers.add(layer);
+    },
+
+    createPolygonLayer: function (zIndex) {
+        return this.createLayer(zxCanvas.PolygonLayer,zIndex);
+    },
+
+    createImageLayer: function (zIndex) {
+        return this.createLayer(zxCanvas.ImageLayer,zIndex);
     }
 
 });
