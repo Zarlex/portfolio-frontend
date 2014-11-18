@@ -3,6 +3,8 @@
 
     var zxCanvas = {};
 
+    // @include ./canvas/layers.js
+    // @include ./canvas/canvas_attributes.js
     // @include ./canvas/canvas.js
     // @include ./canvas/coordinate.js
     // @include ./canvas/coordinates.js
