@@ -4,16 +4,101 @@
 
 var Canvas = Backbone.View.extend({
 
-    _layers: new (Backbone.Collection.extend({
-        comparator: 'zIndex',
-        lastZIndex: 0
-    }))(),
+    attributes: new zxCanvas.CanvasAttributes(),
 
-    _rendering: false,
+    el: 'canvas',
+
+    getContext: function () {
+        return this.el.getContext('2d');
+    },
+
+    getRenderRectangle: function () {
+        var layers = this.get('layers'),
+            xCoordinates = [],
+            yCoordinates = [],
+            startX, startY, endX, endY, width, height;
+
+        layers.forEach(function (layer) {
+            var renderRectangle = layer.getRenderRectangle();
+            xCoordinates.push(renderRectangle[0]);
+            yCoordinates.push(renderRectangle[1]);
+        });
+
+        xCoordinates = xCoordinates.sort();
+        yCoordinates = yCoordinates.sort();
+
+        startX = xCoordinates[0];
+        startY = yCoordinates[0];
+        endX = xCoordinates[xCoordinates.length - 1];
+        endY = yCoordinates[yCoordinates.length - 1];
+        width = endX - startX;
+        height = endY - startY;
+
+        return [startX, startY, width, height];
+    },
+
+    render: function () {
+        var layers = this.attributes.get('layers'),
+            context = this.getContext(),
+            startCanvas = +new Date();
+        console.log('Start Rendering Canvas');
+        context.clearRect.apply(context, [0, 0, 500, 500]);
+        layers.forEach(function (layer) {
+            var context = this.getContext(),
+                renderRectangle = layer.getRenderRectangle();
+
+            context.save();
+            context.globalCompositeOperation = layer.get('globalCompositeOperation');
+            context.drawImage(layer.get('canvas'), renderRectangle[0], renderRectangle[1]);
+            context.restore();
+        }, this);
+        console.log('Finished Rendering Canvas', (+new Date()) - startCanvas);
+    },
+
+    prepareToRender: function () {
+        var rendering = this.attributes.get('rendering');
+        if (this._layersAreReadyToRender() && !rendering) {
+            this.attributes.set('rendering',true);
+            this.render();
+            this.attributes.set('rendering',false);
+        } else if (!rendering) {
+            var self = this;
+
+            window.requestAnimationFrame(function () {
+                self.prepareToRender();
+            });
+        }
+    },
+
+    createLayer: function (Layer, zIndex) {
+        var zIndex = zIndex || (this._layers.lastZIndex += 1),
+            layerId = _.uniqueId('layer_'),
+            canvas = Backbone.$('<canvas id="' + layerId + '"></canvas>'),
+            width = this.attributes.get('width'),
+            height = this.attributes.get('height'),
+            layer = new Layer({id: layerId, canvas: canvas[0], zIndex: zIndex, height: height, width: width});
+
+        this.$el.append(canvas);
+
+        layer.on('change:rendering change:globalCompositeOperation', function () {
+            this.prepareToRender();
+        }, this);
+
+        return this.attributes.get('layers').add(layer);
+    },
+
+    createPolygonLayer: function (zIndex) {
+        return this.createLayer(zxCanvas.PolygonLayer, zIndex);
+    },
+
+    createImageLayer: function (zIndex) {
+        return this.createLayer(zxCanvas.ImageLayer, zIndex);
+    },
 
     _layersAreReadyToRender: function () {
-        var layers = this.getLayers(),
+        var layers = this.attributes.get('layers'),
             ready = true;
+
         layers.forEach(function (layer) {
             if (layer.get('rendering')) {
                 ready = false;
@@ -22,75 +107,24 @@ var Canvas = Backbone.View.extend({
         return ready;
     },
 
-    el: 'canvas',
+    _setSize: function(){
+        var width = this.attributes.get('width'),
+            height = this.attributes.get('height');
 
-    getContext: function () {
-        return this.el.getContext('2d');
+        this.el.width = width;
+        this.el.height = height;
+
+        this.attributes.get('layers').setSize(width, height);
+
+        this.prepareToRender();
     },
 
-    getLayers: function () {
-        return this._layers;
-    },
+    constructor: function(){
+        var constructor = Backbone.View.prototype.constructor.apply(this,arguments);
+        this._setSize();
 
-    getRenderRectangle: function () {
-
-    },
-
-    render: function () {
-        var layers = this.getLayers(),
-            context = this.getContext(),
-            startCanvas = +new Date();
-        console.log('Start Rendering Canvas');
-        context.clearRect.apply(context, [0, 0, 500, 500]);
-        layers.forEach(function (layer) {
-                var context = this.getContext(),
-                    renderRectangle = layer.getRenderRectangle();
-                context.save();
-                context.globalCompositeOperation = layer.get('globalCompositeOperation');
-                console.log(layer.get('globalCompositeOperation'));
-                context.drawImage(layer.get('canvas'), renderRectangle[0], renderRectangle[1]);
-                context.restore();
-        }, this);
-        console.log('Finished Rendering Canvas', (+new Date()) - startCanvas);
-    },
-
-    prepareToRender: function () {
-        if (this._layersAreReadyToRender() && !this._rendering) {
-            this._rendering = true;
-            this.render();
-            this._rendering = false;
-        } else if (!this._rendering) {
-            var self = this;
-
-            this._rendering = true;
-            window.requestAnimationFrame(function () {
-                self.render();
-                self._rendering = false;
-            });
-        }
-    },
-
-    createLayer: function (Layer, zIndex) {
-        var zIndex = zIndex || (this._layers.lastZIndex += 1),
-            layerId = _.uniqueId('layer_'),
-            canvas = Backbone.$('<canvas id="' + layerId + '" width="500px" height="500px"></canvas>'),
-            layer = new Layer({id: layerId, canvas: canvas[0], zIndex: zIndex});
-
-        this.$el.append(canvas);
-
-        layer.on('change:rendering change:globalCompositeOperation', function () {
-            this.prepareToRender();
-        }, this);
-
-        return this._layers.add(layer);
-    },
-
-    createPolygonLayer: function (zIndex) {
-        return this.createLayer(zxCanvas.PolygonLayer,zIndex);
-    },
-
-    createImageLayer: function (zIndex) {
-        return this.createLayer(zxCanvas.ImageLayer,zIndex);
+        this.attributes.on('change:width change:height', this._setSize, this);
+        return constructor;
     }
 
 });
