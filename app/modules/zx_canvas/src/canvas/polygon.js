@@ -11,10 +11,24 @@ var Polygon = zxBackbone.NestedModel.extend({
         };
     },
 
+    animate: function(attributes, duration){
+        var self = this;
+
+        var runAnimation = function(){
+          if(self.get('color').get('alpha')<0){
+              return;
+          } else {
+              self.get('color').set('alpha',self.get('color').get('alpha')-0.01);
+          }
+          window.requestAnimationFrame(runAnimation);
+        };
+        runAnimation();
+    },
+
     render: function (context) {
         var coordinates = this.get('coordinates').toJSON(),
             startEndPoint = coordinates.splice(0,1)[0],
-            color = this.get('color').toHexString();
+            color = this.get('color').toRgbaString();
 
         context.fillStyle = color;
 
