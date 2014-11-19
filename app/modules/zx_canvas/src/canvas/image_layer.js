@@ -9,7 +9,9 @@ var ImageLayer = zxCanvas.Layer.extend({
             src: null,
             syncron: false,
             imageInstance: new Image(),
-            imageLoaded: false
+            imageLoaded: false,
+            width: null,
+            height: null
         });
     },
 
