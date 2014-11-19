@@ -8,7 +8,7 @@ var Color = zxBackbone.Model.extend({
             red: 0,
             green: 0,
             blue: 0,
-            alpha: 0
+            alpha: 1
         };
     },
 
