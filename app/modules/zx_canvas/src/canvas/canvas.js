@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 05.11.14.
  */
-
+'use strict';
 var Canvas = Backbone.View.extend({
 
     attributes: new zxCanvas.CanvasAttributes(),
@@ -70,8 +70,9 @@ var Canvas = Backbone.View.extend({
     },
 
     createLayer: function (Layer, zIndex) {
-        var zIndex = zIndex || (this._layers.lastZIndex += 1),
-            layerId = _.uniqueId('layer_'),
+        zIndex = zIndex || (this._layers.lastZIndex += 1);
+
+        var layerId = _.uniqueId('layer_'),
             canvas = Backbone.$('<canvas id="' + layerId + '"></canvas>'),
             width = this.attributes.get('width'),
             height = this.attributes.get('height'),

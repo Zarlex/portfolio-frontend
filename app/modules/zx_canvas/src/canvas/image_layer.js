@@ -19,17 +19,16 @@ var ImageLayer = zxCanvas.Layer.extend({
         return [0,0,img.width,img.height];
     },
 
-    render: function (img) {
+    render: function () {
         var context = this.get('canvas').getContext('2d'),
             renderRectangle = this.getRenderRectangle();
-        console.log('loaded img');
+
         context.clearRect.apply(context, renderRectangle);
         context.drawImage(this.get('imageInstance'), renderRectangle[0], renderRectangle[1], renderRectangle[2], renderRectangle[3]);
     },
 
     prepareToRender: function(){
-        var self = this,
-            imageInstance = this.get('imageInstance');
+        var self = this;
 
         if(this.get('imageLoaded')){
             self.set('rendering',true);

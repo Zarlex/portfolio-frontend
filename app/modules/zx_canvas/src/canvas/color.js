@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 05.11.14.
  */
-
+'use strict';
 var Color = zxBackbone.Model.extend({
     defaults: function () {
         return {
@@ -9,7 +9,7 @@ var Color = zxBackbone.Model.extend({
             green: 0,
             blue: 0,
             alpha: 0
-        }
+        };
     },
 
     _colorToHexString: function(color){

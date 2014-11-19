@@ -10,7 +10,7 @@ var Layer = zxBackbone.NestedModel.extend({
             rendering: false,
             width: null,
             height: null
-        }
+        };
     },
 
     nested: function(){

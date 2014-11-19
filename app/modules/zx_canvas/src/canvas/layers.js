@@ -1,8 +1,8 @@
 /**
  * Created by zarges on 18.11.14.
  */
-
-var Layers = Backbone.Collection.extend({
+'use strict';
+var Layers = zxBackbone.Collection.extend({
     comparator: 'zIndex',
     lastZIndex: 0,
 

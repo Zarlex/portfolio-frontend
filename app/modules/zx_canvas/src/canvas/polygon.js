@@ -1,14 +1,14 @@
 /**
  * Created by zarges on 05.11.14.
  */
-
+'use strict';
 var Polygon = zxBackbone.NestedModel.extend({
 
     nested: function () {
         return {
             coordinates: zxCanvas.Coordinates,
             color: zxCanvas.Color
-        }
+        };
     },
 
     render: function (context) {
