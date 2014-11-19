@@ -49,12 +49,15 @@
                     layer3.set('src', '/modules/start/images/southside.jpg');
 
                     window.polygon2 = polygon2;
-
+                    layer.set('globalCompositeOperation', 'screen');
 
                     setTimeout(function () {
-                        layer.set('globalCompositeOperation', 'screen');
-                        layer3.set('position',{x: -200, y: -100});
-                    }, 2000);
+
+                        //layer3.set('position',{x: -200, y: -100});
+                        //polygon.animate();
+                        polygon2.animate();
+                        //polygon3.animate();
+                    }, 1000);
                 }
             };
         });
