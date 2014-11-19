@@ -3,6 +3,7 @@
  */
 'use strict';
 var Layer = zxBackbone.NestedModel.extend({
+    _lastRenderRectangle: [0,0,0,0,0],
     defaults: function () {
         return {
             globalCompositeOperation: 'source-over',

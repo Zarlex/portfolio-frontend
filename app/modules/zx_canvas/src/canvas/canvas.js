@@ -4,6 +4,8 @@
 'use strict';
 var Canvas = Backbone.View.extend({
 
+    _lastRenderRectangle: [0, 0, 0, 0],
+
     attributes: new zxCanvas.CanvasAttributes(),
 
     el: 'canvas',
@@ -13,45 +15,54 @@ var Canvas = Backbone.View.extend({
     },
 
     getRenderRectangle: function () {
-        var layers = this.get('layers'),
-            xCoordinates = [],
-            yCoordinates = [],
-            startX, startY, endX, endY, width, height;
+        var layers = this.attributes.get('layers'),
+            xCoordinates = [0],
+            yCoordinates = [0],
+            width = [],
+            height = [];
 
         layers.forEach(function (layer) {
             var renderRectangle = layer.getRenderRectangle();
-            xCoordinates.push(renderRectangle[0]);
-            yCoordinates.push(renderRectangle[1]);
+
+            if(renderRectangle[0]>0){
+                xCoordinates.push(renderRectangle[0]);
+            }
+
+            if(renderRectangle[1]>0){
+                yCoordinates.push(renderRectangle[1]);
+            }
+
+            width.push(renderRectangle[2]);
+            height.push(renderRectangle[3]);
         });
 
         xCoordinates = xCoordinates.sort();
         yCoordinates = yCoordinates.sort();
+        width = width.sort();
+        height = height.sort();
 
-        startX = xCoordinates[0];
-        startY = yCoordinates[0];
-        endX = xCoordinates[xCoordinates.length - 1];
-        endY = yCoordinates[yCoordinates.length - 1];
-        width = endX - startX;
-        height = endY - startY;
-
-        return [startX, startY, width, height];
+        return [xCoordinates[0], yCoordinates[0], width[width.length-1], height[height.length-1]];
     },
 
     render: function () {
         var layers = this.attributes.get('layers'),
             context = this.getContext(),
+            renderRectangle = this.getRenderRectangle(),
             startCanvas = +new Date();
-        console.log('Start Rendering Canvas');
-        context.clearRect.apply(context, [0, 0, 500, 500]);
+
+        console.log('Start Rendering Canvas', this._lastRenderRectangle);
+        context.clearRect.apply(context, this._lastRenderRectangle);
+
         layers.forEach(function (layer) {
-            var context = this.getContext(),
-                renderRectangle = layer.getRenderRectangle();
+            var renderRectangle = layer.getRenderRectangle();
 
             context.save();
             context.globalCompositeOperation = layer.get('globalCompositeOperation');
             context.drawImage(layer.get('canvas'), renderRectangle[0], renderRectangle[1]);
             context.restore();
         }, this);
+
+        this._lastRenderRectangle = renderRectangle;
         console.log('Finished Rendering Canvas', (+new Date()) - startCanvas);
     },
 
@@ -59,10 +70,10 @@ var Canvas = Backbone.View.extend({
         var rendering = this.attributes.get('rendering');
         if (this._layersAreReadyToRender()) {
             this.render();
-            this.attributes.set('rendering',false);
+            this.attributes.set('rendering', false);
         } else if (!rendering) {
             var self = this;
-            this.attributes.set('rendering',true);
+            this.attributes.set('rendering', true);
             window.requestAnimationFrame(function () {
                 self.prepareToRender();
             });
@@ -77,8 +88,6 @@ var Canvas = Backbone.View.extend({
             width = this.attributes.get('width'),
             height = this.attributes.get('height'),
             layer = new Layer({id: layerId, canvas: canvas[0], zIndex: zIndex, height: height, width: width});
-
-        this.$el.append(canvas);
 
         layer.on('change:rendering change:globalCompositeOperation', function () {
             this.prepareToRender();
@@ -107,7 +116,7 @@ var Canvas = Backbone.View.extend({
         return ready;
     },
 
-    _setSize: function(){
+    _setSize: function () {
         var width = this.attributes.get('width'),
             height = this.attributes.get('height');
 
@@ -117,8 +126,8 @@ var Canvas = Backbone.View.extend({
         this.attributes.get('layers').setSize(width, height);
     },
 
-    constructor: function(){
-        var constructor = Backbone.View.prototype.constructor.apply(this,arguments);
+    constructor: function () {
+        var constructor = Backbone.View.prototype.constructor.apply(this, arguments);
         this._setSize();
 
         this.attributes.on('change:width change:height', this._setSize, this);
