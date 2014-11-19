@@ -58,6 +58,7 @@ var Canvas = Backbone.View.extend({
 
             context.save();
             context.globalCompositeOperation = layer.get('globalCompositeOperation');
+            context.globalAlpha = layer.get('globalAlpha');
             context.drawImage(layer.get('canvas'), renderRectangle[0], renderRectangle[1]);
             context.restore();
         }, this);
