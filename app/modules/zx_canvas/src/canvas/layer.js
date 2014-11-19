@@ -9,8 +9,7 @@ var Layer = zxBackbone.NestedModel.extend({
             globalCompositeOperation: 'source-over',
             canvas: null,
             rendering: false,
-            width: null,
-            height: null
+            globalAlpha: 1
         };
     },
 
