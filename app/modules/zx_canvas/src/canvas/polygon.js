@@ -11,14 +11,15 @@ var Polygon = zxBackbone.NestedModel.extend({
         };
     },
 
-    animate: function(attributes, duration){
-        var self = this;
+    animate: function(alpha,duration){
+        var self = this,
+            delta = this.get('color').get('alpha')-alpha;
 
         var runAnimation = function(){
-          if(self.get('color').get('alpha')<0){
+          if(self.get('color').get('alpha')<alpha){
               return;
           } else {
-              self.get('color').set('alpha',self.get('color').get('alpha')-0.01);
+              self.get('color').set('alpha',self.get('color').get('alpha')-(delta/(duration/60)));
           }
           window.requestAnimationFrame(runAnimation);
         };
