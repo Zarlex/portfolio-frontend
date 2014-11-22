@@ -32,8 +32,8 @@ var Canvas = Backbone.View.extend({
                 yCoordinates.push(renderRectangle[1]);
             }
 
-            width.push(renderRectangle[2]);
-            height.push(renderRectangle[3]);
+            width.push(renderRectangle[2] + renderRectangle[0]);
+            height.push(renderRectangle[3] + renderRectangle[1]);
         });
 
         xCoordinates = xCoordinates.sort();
@@ -54,12 +54,10 @@ var Canvas = Backbone.View.extend({
         context.clearRect.apply(context, this._lastRenderRectangle);
 
         layers.forEach(function (layer) {
-            var renderRectangle = layer.getRenderRectangle();
-
             context.save();
             context.globalCompositeOperation = layer.get('globalCompositeOperation');
             context.globalAlpha = layer.get('globalAlpha');
-            context.drawImage(layer.get('canvas'), renderRectangle[0], renderRectangle[1]);
+            context.drawImage(layer.get('canvas'), 0, 0);
             context.restore();
         }, this);
 
