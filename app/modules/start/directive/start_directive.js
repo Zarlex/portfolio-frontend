@@ -18,7 +18,7 @@
                         height: angular.element(document).height()
                     };
                     var layer = canvas.createPolygonLayer(100);
-                    var layer2 = canvas.createPolygonLayer(20);
+                    var layer2 = canvas.createPolygonLayer(200);
                     var layer2b = canvas.createPolygonLayer(30);
                     var layer3 = canvas.createImageLayer(4);
                     var polygon = new zxCanvas.Polygon({coordinates: [
@@ -34,10 +34,10 @@
                         {x: 200, y: 200}
                     ], color: {red: 255, blue: 0, green: 255}});
                     var polygon3 = new zxCanvas.Polygon({coordinates: [
-                        {x: 200, y: 200},
-                        {x: 400, y: 200},
+                        {x: 200, y: 400},
                         {x: 400, y: 400},
-                        {x: 200, y: 400}
+                        {x: 400, y: 600},
+                        {x: 200, y: 600}
                     ], color: {red: 255, blue: 0, green: 255}});
 
                     canvas.attributes.set({width: windowSize.width, height: windowSize.height});
@@ -55,7 +55,7 @@
 
                         //layer3.set('position',{x: -200, y: -100});
                         //polygon.animate();
-                        polygon2.animate();
+                        polygon3.animate(0.8,1000);
                         //polygon3.animate();
                     }, 1000);
                 }
