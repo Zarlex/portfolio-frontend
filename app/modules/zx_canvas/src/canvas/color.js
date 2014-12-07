@@ -21,6 +21,26 @@ var Color = zxBackbone.Model.extend({
         }
     },
 
+    _getFlooredColor: function(color, decimalAmount){
+        decimalAmount = decimalAmount || 0;
+        color = this.get(color);
+
+        var decimalMultiplier = Math.pow(10,decimalAmount);
+
+        return Math.floor(color*decimalMultiplier)/decimalMultiplier;
+
+    },
+
+    _getInRangeNumber: function(num,min,max){
+        if(num>max){
+            num = max;
+        } else if(num < min){
+            num = min;
+        };
+
+        return num;
+    },
+
     toHexString: function () {
         return '#' +
             this._colorToHexString(this.get('red')) +
@@ -33,7 +53,12 @@ var Color = zxBackbone.Model.extend({
     },
 
     toRgbaString: function () {
-        return 'rgba(' + this.get('red') + ',' + this.get('green') + ',' + this.get('blue') + ',' + this.get('alpha') + ')';
+        var red = this._getInRangeNumber(this._getFlooredColor('red'),0,255),
+            blue= this._getInRangeNumber(this._getFlooredColor('blue'),0,255),
+            green = this._getInRangeNumber(this._getFlooredColor('green'),0,255),
+            alpha = this._getInRangeNumber(this._getFlooredColor('alpha',2),0,1);
+
+        return 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')';
     }
 });
 
