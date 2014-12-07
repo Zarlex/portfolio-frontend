@@ -7,23 +7,9 @@ var Polygon = zxBackbone.NestedModel.extend({
     nested: function () {
         return {
             coordinates: zxCanvas.Coordinates,
-            color: zxCanvas.Color
+            color: zxCanvas.Color,
+            animationQueue: zxBackbone.Collection
         };
-    },
-
-    animate: function(alpha,duration){
-        var self = this,
-            delta = this.get('color').get('alpha')-alpha;
-
-        var runAnimation = function(){
-          if(self.get('color').get('alpha')<alpha){
-              return;
-          } else {
-              self.get('color').set('alpha',self.get('color').get('alpha')-(delta/(duration/60)));
-          }
-          window.requestAnimationFrame(runAnimation);
-        };
-        runAnimation();
     },
 
     render: function (context) {
