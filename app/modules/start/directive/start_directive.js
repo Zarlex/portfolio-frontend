@@ -52,11 +52,8 @@
                     layer.set('globalCompositeOperation', 'screen');
 
                     setTimeout(function () {
-
-                        //layer3.set('position',{x: -200, y: -100});
-                        //polygon.animate();
-                        polygon3.animate(0.8,1000);
-                        //polygon3.animate();
+                        zxCanvas.animationQueue.add({duration:2000,model:polygon2.get('color'),attributes:{blue:255,red:0,green:0}});
+                        zxCanvas.animationQueue.add({duration:5000,model:polygon3.get('color'),attributes:{alpha:0}});
                     }, 1000);
                 }
             };
