@@ -15,6 +15,10 @@
     // @include ./canvas/polygon_layer.js
     // @include ./canvas/image_layer.js
 
+    // @include ./animation_queue/animation_object.js
+    // @include ./animation_queue/animation_queue_attributes.js
+    // @include ./animation_queue/animation_queue.js
+
     // @include ./diamonds/diamond.js
 
     root.zxCanvas = zxCanvas;
