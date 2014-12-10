@@ -19,8 +19,6 @@
     // @include ./animation_queue/animation_queue_attributes.js
     // @include ./animation_queue/animation_queue.js
 
-    // @include ./diamonds/diamond.js
-
     root.zxCanvas = zxCanvas;
 
 }(this));
