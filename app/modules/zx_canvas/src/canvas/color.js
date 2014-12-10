@@ -36,7 +36,7 @@ var Color = zxBackbone.Model.extend({
             num = max;
         } else if(num < min){
             num = min;
-        };
+        }
 
         return num;
     },
