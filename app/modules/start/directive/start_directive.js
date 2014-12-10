@@ -39,12 +39,15 @@
                         {x: 400, y: 600},
                         {x: 200, y: 600}
                     ], color: {red: 255, blue: 0, green: 255}});
+                    var diamond = new zxDiamondRaster.Diamond({height: 100, width:100,position:{x:0,y:0}});
+                    console.log(diamond);
 
                     canvas.attributes.set({width: windowSize.width, height: windowSize.height});
 
                     layer.get('polygons').add(polygon);
                     layer2.get('polygons').add(polygon2);
                     layer2b.get('polygons').add(polygon3);
+                    layer2.get('polygons').add(diamond);
 
                     layer3.set('src', '/modules/start/images/southside.jpg');
 
@@ -53,7 +56,7 @@
 
                     setTimeout(function () {
                         zxCanvas.animationQueue.add({duration:2000,model:polygon2.get('color'),attributes:{blue:255,red:0,green:0}});
-                        zxCanvas.animationQueue.add({duration:5000,model:polygon3.get('color'),attributes:{alpha:0}});
+                        zxCanvas.animationQueue.add({duration:1000,model:polygon3.get('position'),attributes:{x:100,y:100}});
                     }, 1000);
                 }
             };
