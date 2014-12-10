@@ -67,7 +67,6 @@ var AnimationObject = zxBackbone.NestedModel.extend({
         }
 
         newValue = model.get(propertyKey) + incrementValue;
-        console.log(newValue)
 
         if(this.propertyAnimationHasFinished(propertyKey)){
             model.set(propertyKey, this.get('attributes').get(propertyKey));
