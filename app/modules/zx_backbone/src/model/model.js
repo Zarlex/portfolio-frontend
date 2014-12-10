@@ -4,6 +4,10 @@
 
 var Model = Backbone.Model.extend({
 
+    defaults: function(){
+        return {};
+    }
+
 });
 
 zxBackbone.Model = Model;
