@@ -26,6 +26,7 @@
         "_": true,
         "Backbone": true,
         "zxBackbone": true,
-        "zxCanvas": true
+        "zxCanvas": true,
+        "zxDiamondRaster":true
     }
 }
