@@ -7,18 +7,20 @@ var Polygons = zxBackbone.Collection.extend({
     model: zxCanvas.Polygon,
 
     getRenderRectangle: function () {
-        var polygons = this.toJSON(),
-            xCoordinates = [],
+        var xCoordinates = [],
             yCoordinates = [],
             startX, startY, endX, endY, width, height;
 
-        if (polygons.length === 0) {
+        if (this.length === 0) {
             return [0, 0, 0, 0];
         } else {
-            polygons.forEach(function (polygon) {
-                polygon.coordinates.forEach(function (coordinate) {
-                    xCoordinates.push(coordinate.get('x'));
-                    yCoordinates.push(coordinate.get('y'));
+            this.each(function (polygon) {
+                var x = polygon.get('position').get('x'),
+                    y = polygon.get('position').get('y');
+
+                polygon.get('coordinates').each(function (coordinate) {
+                    xCoordinates.push(coordinate.get('x')+x);
+                    yCoordinates.push(coordinate.get('y')+y);
                 });
             });
 
