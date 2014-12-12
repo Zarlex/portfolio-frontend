@@ -40,8 +40,8 @@ var Layer = zxBackbone.NestedModel.extend({
     },
 
     _setSize: function(){
-        this.get('canvas').width = this.get('height');
-        this.get('canvas').height = this.get('width');
+        this.get('canvas').width = this.get('width');
+        this.get('canvas').height = this.get('height');
         this.prepareToRender();
     },
 

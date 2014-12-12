@@ -21,7 +21,7 @@ var PolygonLayer = zxCanvas.Layer.extend({
 
         context.clearRect.apply(context, this._lastRenderRectangle);
 
-        this.get('polygons').forEach(function (polygon) {
+        this.get('polygons').each(function (polygon) {
             polygon.render(context);
         }, this);
         this._lastRenderRectangle = renderRectangle;

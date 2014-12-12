@@ -4,7 +4,6 @@
 'use strict';
 var Layers = zxBackbone.Collection.extend({
     comparator: 'zIndex',
-    lastZIndex: 0,
 
     setSize: function (width, height) {
         this.forEach(function (layer) {
