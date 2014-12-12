@@ -25,7 +25,7 @@ var Diamond = zxCanvas.Polygon.extend({
 
     constructor: function(){
 
-        this.on('change:width change:height change:position', function(){
+        this.on('change:width change:height', function(){
             var height = this.get('height'),
                 width = this.get('width');
 
