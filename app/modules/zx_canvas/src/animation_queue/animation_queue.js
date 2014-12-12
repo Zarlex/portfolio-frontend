@@ -15,10 +15,10 @@ var AnimationQueue = zxBackbone.Collection.extend({
             window.requestAnimationFrame(function () {
                 self.forEach(function(animationObject){
                     if(animationObject.animationHasFinished()){
-                        animationObject.animate()
+                        animationObject.animate();
                         self.remove(animationObject);
                     } else {
-                        animationObject.animate()
+                        animationObject.animate();
                     }
                 },self);
 
