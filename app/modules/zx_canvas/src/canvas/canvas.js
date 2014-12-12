@@ -79,30 +79,6 @@ var Canvas = Backbone.View.extend({
         }
     },
 
-    createLayer: function (Layer, zIndex) {
-        zIndex = zIndex || (this._layers.lastZIndex += 1);
-
-        var layerId = _.uniqueId('layer_'),
-            canvas = Backbone.$('<canvas id="' + layerId + '"></canvas>'),
-            width = this.attributes.get('width'),
-            height = this.attributes.get('height'),
-            layer = new Layer({id: layerId, canvas: canvas[0], zIndex: zIndex, height: height, width: width});
-
-        layer.on('change:rendering change:globalCompositeOperation', function () {
-            this.prepareToRender();
-        }, this);
-
-        return this.attributes.get('layers').add(layer);
-    },
-
-    createPolygonLayer: function (zIndex) {
-        return this.createLayer(zxCanvas.PolygonLayer, zIndex);
-    },
-
-    createImageLayer: function (zIndex) {
-        return this.createLayer(zxCanvas.ImageLayer, zIndex);
-    },
-
     _layersAreReadyToRender: function () {
         var layers = this.attributes.get('layers'),
             ready = true;
@@ -121,8 +97,6 @@ var Canvas = Backbone.View.extend({
 
         this.el.width = width;
         this.el.height = height;
-
-        this.attributes.get('layers').setSize(width, height);
     },
 
     constructor: function () {
