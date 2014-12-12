@@ -15,15 +15,39 @@ var DiamondRaster = zxCanvas.PolygonLayer.extend({
     },
 
     _generate: function(){
-        var polygons = this.get('polygons');
+        var polygons = this.get('polygons'),
+            rows = this.get('rows'),
+            columns = this.get('columns');
+
         polygons.reset();
+
+        for(var r=0;r<rows;r++){
+            for(var c=0;c<columns;c++){
+                var dWitdh = this.get('diamondWidth'),
+                    dHeight = this.get('diamondHeight'),
+                    diamond = new zxDiamondRaster.Diamond({width:dWitdh,height:dHeight});
+
+                diamond.get('position').set({x:c*dWitdh,y:r*dHeight});
+                polygons.add(diamond);
+            }
+        }
+
+        for(var r= 0.5;r<rows;r++){
+            for(var c= 0.5;c<columns;c++){
+                var dWitdh = this.get('diamondWidth'),
+                    dHeight = this.get('diamondHeight'),
+                    diamond = new zxDiamondRaster.Diamond({width:dWitdh,height:dHeight});
+
+                diamond.get('position').set({x:c*dWitdh,y:r*dHeight});
+                polygons.add(diamond);
+            }
+        }
     },
 
     constructor: function(){
-
+        var superConstructor = zxCanvas.PolygonLayer.prototype.constructor.apply(this,arguments);
         this._generate();
-
-        return zxCanvasPolygonLayer.prototype.constructor.apply(this,arguments);
+        return superConstructor;
     }
 
 });
