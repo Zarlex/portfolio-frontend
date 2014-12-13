@@ -3,7 +3,7 @@
 
     angular.module('Portfolio')
 
-        .directive('zxCanvas', function ($http) {
+        .directive('zxCanvas', function () {
             return {
                 replace: true,
                 template: '<canvas style="position: absolute; left: 0;top:0"></canvas>', //Width && Height = (row or col amount-1 * diamond width or height)-(diamond width or height)/2

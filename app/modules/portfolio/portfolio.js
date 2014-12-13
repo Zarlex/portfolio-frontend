@@ -14,7 +14,7 @@
       $httpProvider.defaults.useXDomain = true;
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-      $provide.factory('requestInterceptor', ['$q', '$rootScope', '$log', function ($q, $rootScope, $log) {
+      $provide.factory('requestInterceptor', ['$q', '$rootScope', '$log', function ($q/*, $rootScope, $log*/) {
         return {
           request: function (request) {
             /* Do Stuff before request */
@@ -44,7 +44,7 @@
       '$location',
       '$http',
       '$timeout',
-      function ($rootScope, $location, $http, $timeout, config) {
+      function ($rootScope, $location/*, $http, $timeout, config*/) {
         $rootScope.goTo = function (path, params) {
           if (params) {
             $location.search(params).path(path);
@@ -53,7 +53,7 @@
           }
         };
 
-        $rootScope.$on('$routeChangeStart', function (event, current) {
+        $rootScope.$on('$routeChangeStart', function (/*event, current*/) {
           /* Do Stuff on route change start */
         });
 
