@@ -40,7 +40,7 @@
                     },
                     livereload: {
                         options: {
-                            middleware: function (connect, options, middlewares) {
+                            middleware: function (connect) {
 
                                 return [
                                     //screenShotSnipet,
@@ -92,39 +92,33 @@
                     all: [
                         'Gruntfile.js',
                         '<%= yeoman.app %>/modules/**/{,*/}*.js',
-                        'spec/**/{,*/}*.js'
+                        '!<%= yeoman.app %>/modules/**/node_modules/**/{,*/}*.js',
+                        '!<%= yeoman.app %>/modules/**/src/**/{,*/}*.js',
                     ]
                 },
                 compass: {
                     options: {
                         sassDir: '<%= yeoman.app %>/styles',
                         cssDir: '.tmp/styles',
-                        imagesDir: '<%= yeoman.app %>/images',
+                        imagesDir: '<%= yeoman.app %>/modules',
                         javascriptsDir: '<%= yeoman.app %>/modules',
                         fontsDir: '<%= yeoman.app %>/fonts',
                         importPath: ['<%= yeoman.app %>/components', '<%= yeoman.app %>/modules'],
                         relativeAssets: true
                     },
+                    dist: {},
                     server: {
                         options: {
                             debugInfo: true
                         }
                     }
                 },
-                concat: {
-                    dist: {
-                        files: {
-                            '<%= yeoman.dist %>/modules/portfolio.js': [
-                                '.tmp/modules/{,*/}*.js',
-                                '<%= yeoman.app %>/modules/{,*/}*.js'
-                            ]
-                        }
-                    }
-                },
                 useminPrepare: {
-                    html: '<%= yeoman.app %>/index.html',
-                    options: {
-                        dest: '<%= yeoman.dist %>'
+                    portfolio: {
+                        src: ['<%= yeoman.app %>/index.html'],
+                        options: {
+                            dest: '<%= yeoman.dist %>'
+                        }
                     }
                 },
                 usemin: {
@@ -155,29 +149,6 @@
                         }
                     }
                 },
-                htmlmin: {
-                    dist: {
-                        options: {
-                            /*removeCommentsFromCDATA: true,
-                             // https://github.com/yeoman/grunt-usemin/issues/44
-                             //collapseWhitespace: true,
-                             collapseBooleanAttributes: true,
-                             removeAttributeQuotes: true,
-                             removeRedundantAttributes: true,
-                             useShortDoctype: true,
-                             removeEmptyAttributes: true,
-                             removeOptionalTags: true*/
-                        },
-                        files: [
-                            {
-                                expand: true,
-                                cwd: '<%= yeoman.app %>',
-                                src: ['*.html', 'modules/**/*.html'],
-                                dest: '<%= yeoman.dist %>'
-                            }
-                        ]
-                    }
-                },
                 cdnify: {
                     dist: {
                         html: ['<%= yeoman.dist %>/*.html']
@@ -196,12 +167,8 @@
                     }
                 },
                 uglify: {
-                    dist: {
-                        files: {
-                            '<%= yeoman.dist %>/modules/relution.js': [
-                                '<%= yeoman.dist %>/modules/relution.js'
-                            ]
-                        }
+                    options: {
+                        mangle:true //obfuscation
                     }
                 },
                 rev: {
@@ -212,12 +179,6 @@
                                 '<%= yeoman.dist %>/styles/{,*/}*.css'
                             ]
                         }
-                    }
-                },
-                preprocess: {
-                    zxCanvas: {
-                        src: '<%= yeoman.app %>/modules/zx_canvas/src/zx_canvas.js',
-                        dest: '<%= yeoman.app %>/modules/zx_canvas/dist/zx_canvas.js'
                     }
                 },
                 copy: {
@@ -231,12 +192,17 @@
                                 src: [
                                     '*.{ico,txt,png}',
                                     '.htaccess',
-                                    'i18n/*',
-                                    'images/{,*/}*.{gif,webp}',
-                                    'fonts/*'
+                                    'modules/i18n/*',
+                                    'modules/**/images/{,*/}*.{gif,webp,jpg,png}'
                                 ]
                             }
                         ]
+                    },
+                    tmp: {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>',
+                        src: ['*.html'],
+                        dest: '<%= yeoman.dist %>'
                     },
                     fonts: {
                         files: [
@@ -270,14 +236,14 @@
                 },
                 ngtemplates: {
                     app: {
-                        src: 'app/modules/**/*.html',
-                        dest: '<%= yeoman.dist %>/modules/relution-ui.js',
+                        src: '<%= yeoman.app %>/modules/**/*.html',
+                        dest: '.tmp/concat/modules/portfolio.ui.js',
                         options: {
                             url: function (url) {
                                 return url.replace('app/', '');
                             },
                             bootstrap: function (module, script) {
-                                return 'angular.module("Relution").run(["$templateCache", function($templateCache) {' + script + '}]);';
+                                return 'angular.module("Portfolio").run(["$templateCache", function($templateCache) {' + script + '}]);';
                             }
                         }
                     }
@@ -325,13 +291,14 @@
             'compass:dist',
             'useminPrepare',
             'imagemin',
-            'htmlmin',
+            'copy:tmp',
             'concat',
             'ngtemplates',
             'copy:dist',
             'cdnify',
-            'ngmin',
             'cssmin',
+            'ngmin',
+            'uglify',
             'rev',
             'usemin'
         ]);
