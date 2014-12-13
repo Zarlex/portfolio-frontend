@@ -1,7 +1,6 @@
 /**
  * Created by zarges on 12.12.14.
  */
-'use strict';
 
 var LayerFactory = function (canvas) {
 
@@ -19,8 +18,6 @@ var LayerFactory = function (canvas) {
 
         var layerId = _.uniqueId('layer_'),
             canvas = Backbone.$('<canvas id="' + layerId + '"></canvas>'),
-            width = _canvas.attributes.get('width'),
-            height = _canvas.attributes.get('height'),
             layer;
 
 

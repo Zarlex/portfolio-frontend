@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 26.11.14.
  */
-'use strict';
+
 var AnimationObject = zxBackbone.NestedModel.extend({
     defaults: function () {
         return {

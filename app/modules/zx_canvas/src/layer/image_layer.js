@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 16.11.14.
  */
-'use strict';
+
 var ImageLayer = zxCanvas.Layer.extend({
     defaults: function () {
         var defaults = zxCanvas.Layer.prototype.defaults.apply(this,arguments);

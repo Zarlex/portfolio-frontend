@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 16.11.14.
  */
-'use strict';
+
 var Layer = zxBackbone.NestedModel.extend({
     _lastRenderRectangle: [0,0,0,0,0],
     defaults: function () {

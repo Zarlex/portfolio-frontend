@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 05.11.14.
  */
-'use strict';
+
 var Color = zxBackbone.Model.extend({
     defaults: function () {
         return {

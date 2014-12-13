@@ -34,8 +34,8 @@
                 },
                 preprocess: {
                     js: {
-                        src: '<%= yeoman.app %>/zx_canvas.js',
-                        dest: '<%= yeoman.dist %>/zx_canvas.js'
+                        src: '<%= yeoman.app %>/zx_diamond_raster.js',
+                        dest: '<%= yeoman.dist %>/zx_diamond_raster.js'
                     }
                 }
             }

@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 18.11.14.
  */
-'use strict';
+
 var Layers = zxBackbone.Collection.extend({
     comparator: 'zIndex',
 

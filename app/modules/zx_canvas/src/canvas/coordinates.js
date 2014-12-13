@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 14.11.14.
  */
-'use strict';
+
 var Coordinates = zxBackbone.Collection.extend({
     model: zxCanvas.Coordinate
 });

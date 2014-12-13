@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 08.12.14.
  */
-'use strict';
+
 var DiamondRaster = zxCanvas.PolygonLayer.extend({
 
     defaults : function(){
@@ -32,14 +32,14 @@ var DiamondRaster = zxCanvas.PolygonLayer.extend({
             }
         }
 
-        for(var r= 0.5;r<rows;r++){
-            for(var c= 0.5;c<columns;c++){
-                var dWitdh = this.get('diamondWidth'),
-                    dHeight = this.get('diamondHeight'),
-                    diamond = new zxDiamondRaster.Diamond({width:dWitdh,height:dHeight});
+        for(var r2= 0.5;r2<rows;r2++){
+            for(var c2= 0.5;c2<columns;c2++){
+                var dWitdh2 = this.get('diamondWidth'),
+                    dHeight2 = this.get('diamondHeight'),
+                    diamond2 = new zxDiamondRaster.Diamond({width:dWitdh2,height:dHeight2});
 
-                diamond.get('position').set({x:c*dWitdh,y:r*dHeight});
-                polygons.add(diamond);
+                diamond2.get('position').set({x:c2*dWitdh2,y:r2*dHeight2});
+                polygons.add(diamond2);
             }
         }
     },

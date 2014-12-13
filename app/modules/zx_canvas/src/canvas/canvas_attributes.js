@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 18.11.14.
  */
-'use strict';
+
 var CanvasAttributes = zxBackbone.NestedModel.extend({
     defaults: function () {
         return {

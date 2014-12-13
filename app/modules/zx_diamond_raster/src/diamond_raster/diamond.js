@@ -1,7 +1,7 @@
 /**
  * Created by zarges on 10.12.14.
  */
-'use strict';
+
 var Diamond = zxCanvas.Polygon.extend({
 
     defaults : function(){
