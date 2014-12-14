@@ -10,6 +10,8 @@
         // load all grunt tasks
         require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
+        grunt.loadTasks('grunt_tasks/github_publish/tasks');
+
         // configurable paths
         var yeomanConfig = {
             app: 'app',
@@ -30,6 +32,11 @@
                             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                         ],
                         tasks: ['livereload']
+                    }
+                },
+                githubpublish: {
+                    portfolio:{
+                        src: '<%= yeoman.dist %>'
                     }
                 },
                 connect: {
