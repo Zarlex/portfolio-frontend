@@ -83,8 +83,7 @@
                                 dot: true,
                                 src: [
                                     '.tmp',
-                                    '<%= yeoman.dist %>/*',
-                                    '!<%= yeoman.dist %>/.git*'
+                                    '<%= yeoman.dist %>/*'
                                 ]
                             }
                         ]
@@ -100,7 +99,7 @@
                         'Gruntfile.js',
                         '<%= yeoman.app %>/modules/**/{,*/}*.js',
                         '!<%= yeoman.app %>/modules/**/node_modules/**/{,*/}*.js',
-                        '!<%= yeoman.app %>/modules/**/src/**/{,*/}*.js',
+                        '!<%= yeoman.app %>/modules/**/src/**/{,*/}*.js'
                     ]
                 },
                 compass: {
@@ -166,9 +165,9 @@
                         files: [
                             {
                                 expand: true,
-                                cwd: '<%= yeoman.dist %>/modules',
+                                cwd: '.tmp/concat/modules/',
                                 src: '*.js',
-                                dest: '<%= yeoman.dist %>/modules'
+                                dest: '.tmp/concat/modules/'
                             }
                         ]
                     }
@@ -243,7 +242,10 @@
                 },
                 ngtemplates: {
                     app: {
-                        src: '<%= yeoman.app %>/modules/**/*.html',
+                        src: [
+                            '<%= yeoman.app %>/modules/**/*.html',
+                            '!<%= yeoman.app %>/modules/**/node_modules/**/{,*/}*.html'
+                        ],
                         dest: '.tmp/concat/modules/portfolio.ui.js',
                         options: {
                             url: function (url) {
@@ -308,6 +310,12 @@
             'uglify',
             'rev',
             'usemin'
+        ]);
+
+        grunt.registerTask('publish', [
+            'build',
+            'githubpublish',
+            'clean'
         ]);
 
         grunt.registerTask('default', ['server']);
