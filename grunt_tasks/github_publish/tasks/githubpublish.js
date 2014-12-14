@@ -65,10 +65,6 @@ module.exports = function (grunt) {
 
         git.checkoutBranch(currentBranch);
 
-        deleteOldFiles(copiedFiles);
-
-        grunt.file.delete(copiedFilesTxtFile);
-
         git.stashApply();
 
     });
@@ -112,7 +108,7 @@ module.exports = function (grunt) {
         };
 
         this.getCurrentBranch = function(){
-            return shell.exec('git rev-parse --abbrev-ref HEAD');
+            return shell.exec('git rev-parse --abbrev-ref HEAD').output;
         };
 
         this.remove = function(path){
