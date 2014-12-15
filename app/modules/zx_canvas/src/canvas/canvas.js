@@ -36,8 +36,8 @@ var Canvas = Backbone.View.extend({
             height.push(renderRectangle[3] + renderRectangle[1]);
         });
 
-        xCoordinates = xCoordinates.sort(function(a, b){return a-b});
-        yCoordinates = yCoordinates.sort(function(a, b){return a-b});
+        xCoordinates = zxCanvas.utils.sortNumbers(xCoordinates);
+        yCoordinates = zxCanvas.utils.sortNumbers(yCoordinates);
         width = width.sort(function(a, b){return a-b});
         height = height.sort(function(a, b){return a-b});
 

@@ -24,8 +24,8 @@ var Polygons = zxBackbone.Collection.extend({
                 });
             });
 
-            xCoordinates = xCoordinates.sort(function(a, b){return a-b});
-            yCoordinates = yCoordinates.sort(function(a, b){return a-b});
+            xCoordinates = zxCanvas.utils.sortNumbers(xCoordinates);
+            yCoordinates = zxCanvas.utils.sortNumbers(yCoordinates);
 
             startX = xCoordinates[0];
             startY = yCoordinates[0];

@@ -3,6 +3,9 @@
 
     var zxCanvas = {};
 
+    // @include ./utils/utils.js
+    // @include ./utils/sort_numbers.js
+
     // @include ./layer/layer.js
     // @include ./layer/layers.js
     // @include ./layer/polygon_layer.js
