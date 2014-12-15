@@ -5,7 +5,7 @@
 
     .controller('StartController', function ($scope) {
         $scope.test='This is a simple boilerplate -----';
-          $scope.model = {test:100};
+          $scope.model = {test:50};
 
     });
 

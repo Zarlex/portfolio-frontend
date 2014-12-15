@@ -19,9 +19,9 @@
                             width: angular.element(document).width(),
                             height: angular.element(document).height()
                         },
-                        diamondRasterLayer = layerFactory.createLayer(zxDiamondRaster.DiamondRaster,{rows:5,columns:9,diamondHeight:240,diamondWidth:240});
+                        diamondRasterLayer = layerFactory.createLayer(zxDiamondRaster.DiamondRaster,{rows:5,columns:9,diamondHeight:240,diamondWidth:240,position:{x:-120,y:-120}});
 
-                    canvas.attributes.set({width: windowSize.width, height: windowSize.height});
+                    canvas.attributes.set({width: windowSize.width+120, height: windowSize.height+120});
                     layers.add(diamondRasterLayer);
 
                     scope.$watch('opacity',function(value){
