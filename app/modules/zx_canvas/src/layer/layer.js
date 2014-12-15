@@ -14,7 +14,9 @@ var Layer = zxBackbone.NestedModel.extend({
     },
 
     nested: function(){
-      return {};
+      return {
+          position: zxCanvas.Coordinate
+      };
     },
 
     getRenderRectangle: function () {
