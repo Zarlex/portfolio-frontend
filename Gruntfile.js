@@ -258,26 +258,14 @@
                     }
                 },
                 shell: {
-
                     canvas: {
-                        options: {
-                            stdout: true,
-                            failOnError: true,
-                            callback: function (/*err, stdout, stderr, cb*/) {
-
-                            }
-                        },
                         command: 'cd app/modules/zx_canvas; grunt;'
                     },
                     backbone: {
-                        options: {
-                            stdout: true,
-                            failOnError: true,
-                            callback: function (/*err, stdout, stderr, cb*/) {
-
-                            }
-                        },
                         command: 'cd app/modules/zx_backbone; grunt;'
+                    },
+                    diamonds: {
+                        command: 'cd app/modules/zx_diamond_raster; grunt;'
                     }
                 }
             }
@@ -285,7 +273,7 @@
 
         grunt.renameTask('regarde', 'watch');
 
-        grunt.registerTask('server', [
+        grunt.registerTask('serve', [
             'copy:fonts',
             'clean:server',
             'compass:server',
