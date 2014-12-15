@@ -36,10 +36,10 @@ var Canvas = Backbone.View.extend({
             height.push(renderRectangle[3] + renderRectangle[1]);
         });
 
-        xCoordinates = xCoordinates.sort();
-        yCoordinates = yCoordinates.sort();
-        width = width.sort();
-        height = height.sort();
+        xCoordinates = xCoordinates.sort(function(a, b){return a-b});
+        yCoordinates = yCoordinates.sort(function(a, b){return a-b});
+        width = width.sort(function(a, b){return a-b});
+        height = height.sort(function(a, b){return a-b});
 
         return [xCoordinates[0], yCoordinates[0], width[width.length-1], height[height.length-1]];
     },
