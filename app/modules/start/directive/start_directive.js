@@ -19,16 +19,31 @@
                             width: angular.element(document).width(),
                             height: angular.element(document).height()
                         },
-                        diamondRasterLayer = layerFactory.createLayer(zxDiamondRaster.DiamondRaster,{rows:5,columns:9,diamondHeight:240,diamondWidth:240,position:{x:-120,y:-120}});
+                        diamondRasterLayer = layerFactory.createLayer(zxDiamondRaster.DiamondRaster,{rowAmount:5,columnAmount:9,diamondHeight:240,diamondWidth:240,position:{x:-120,y:-120}});
 
                     canvas.attributes.set({width: windowSize.width+120, height: windowSize.height+120});
                     layers.add(diamondRasterLayer);
 
                     scope.$watch('opacity',function(value){
                         if(value){
-                            diamondRasterLayer.get('polygons').each(function(diamond){
+
+                            var rows = diamondRasterLayer.getRows(),
+                                columns = diamondRasterLayer.getColumns();
+                            rows[4].forEach(function(diamond){
                                 diamond.set({color:{alpha:value/100}});
                             });
+                            rows[6].forEach(function(diamond){
+                                diamond.set({color:{alpha:value/100}});
+                            });
+                            columns[4].forEach(function(diamond){
+                                diamond.set({color:{alpha:value/100}});
+                            });
+                            columns[6].forEach(function(diamond){
+                                diamond.set({color:{alpha:value/100}});
+                            });
+                            //diamondRasterLayer.get('polygons').each(function(diamond){
+                            //    diamond.set({color:{alpha:value/100}});
+                            //});
                         }
                     });
 
