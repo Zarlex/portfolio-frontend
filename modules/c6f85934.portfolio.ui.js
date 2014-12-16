@@ -1,1 +1,0 @@
-angular.module("Portfolio").run(["$templateCache",function(a){"use strict";a.put("modules/start/template/start.html",'<input type="range" ng-model="model.test" style="z-index: 999999;position: relative" min="0" max="100">\n<div class="background-image"></div>\n<div zx-canvas opacity="model.test"></div>\n')}]);
