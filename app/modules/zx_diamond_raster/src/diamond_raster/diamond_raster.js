@@ -61,19 +61,19 @@ var DiamondRaster = zxCanvas.PolygonLayer.extend({
                     diamondsBottom = polygons.where({row: rowAmount - 1 - r});
 
                 for (var circleIncrementor = 0;
-                     circleIncrementor<diamondsTop.length/2 && circleIncrementor<diamondsBottom.length/2;
+                     circleIncrementor < diamondsTop.length / 2 && circleIncrementor < diamondsBottom.length / 2;
                      circleIncrementor++) {
 
-                    var circleNum = circleStartNum-circleIncrementor + (columnAmount-rowAmount)/2 -1,
+                    var circleNum = circleStartNum - circleIncrementor + Math.floor((columnAmount - rowAmount) / 2) - 1,
                         circle = circles[circleNum] || [];
 
                     //Put all diamond of the top half into the circle
                     circle.push(diamondsTop[circleIncrementor]);
-                    circle.push(diamondsTop[diamondsTop.length-1-circleIncrementor]);
+                    circle.push(diamondsTop[diamondsTop.length - 1 - circleIncrementor]);
 
                     //Put all diamond of the bottom half into the circle
                     circle.push(diamondsBottom[circleIncrementor]);
-                    circle.push(diamondsBottom[diamondsBottom.length-1-circleIncrementor]);
+                    circle.push(diamondsBottom[diamondsBottom.length - 1 - circleIncrementor]);
 
                     circles[circleNum] = circle;
                 }
