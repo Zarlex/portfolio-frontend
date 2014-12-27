@@ -9,7 +9,7 @@ var LayerFactory = function (canvas) {
 
     var _getCanvasSize = function () {
         return {
-            width: canvas.attributes.get('width'),
+            width: _canvas.attributes.get('width'),
             height: _canvas.attributes.get('height')
         };
     };
