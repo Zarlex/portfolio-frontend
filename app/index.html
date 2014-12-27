@@ -51,7 +51,8 @@
 <div ng-view append-class-according-to-route></div>
 
 <div class="diamond-raster">
-  <div zx-canvas opacity="70"></div>
+  <input type="range" ng-model="model.circleOpacity" min="0" max="100" style="position: relative; z-index: 10">
+  <div zx-canvas opacity="model.circleOpacity"></div>
 </div>
 <footer></footer>
 
