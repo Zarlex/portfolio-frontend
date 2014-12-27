@@ -45,6 +45,11 @@
       '$http',
       '$timeout',
       function ($rootScope, $location/*, $http, $timeout, config*/) {
+
+        $rootScope.model = {
+          circleOpacity: 1
+        };
+
         $rootScope.goTo = function (path, params) {
           if (params) {
             $location.search(params).path(path);
