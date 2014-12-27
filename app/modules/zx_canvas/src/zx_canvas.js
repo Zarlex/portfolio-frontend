@@ -14,9 +14,10 @@
 
     // @include ./canvas/canvas_attributes.js
     // @include ./canvas/canvas.js
+    // @include ./canvas/color.js
     // @include ./canvas/coordinate.js
     // @include ./canvas/coordinates.js
-    // @include ./canvas/color.js
+    // @include ./canvas/image.js
     // @include ./canvas/polygon.js
     // @include ./canvas/polygons.js
 
