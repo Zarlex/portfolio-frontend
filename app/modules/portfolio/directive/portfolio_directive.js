@@ -39,6 +39,12 @@
                             left: (columnAmount * diamondSize.width - windowSize.width) / 2,
                             top: (rowAmount * diamondSize.height - windowSize.height) / 2
                         },
+                        imageLayer = layerFactory.createLayer(zxCanvas.ImageLayer, {
+                            image: {
+                                src: '/modules/portfolio/images/southside.jpg',
+                                width: windowSize.width
+                            }
+                        }),
                         diamondRasterLayer = layerFactory.createLayer(
                             zxDiamondRaster.DiamondRaster, {
                                 rowAmount: rowAmount,
@@ -58,6 +64,8 @@
                     });
 
                     layers.add(diamondRasterLayer);
+
+                    layers.add(imageLayer);
 
                     scope.$watch('opacity', function (value) {
                         if (value) {
