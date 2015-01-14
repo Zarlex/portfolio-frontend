@@ -32,6 +32,10 @@
                             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                         ],
                         tasks: ['livereload']
+                    },
+                    dist:{
+                        files: ['<%= yeoman.dist %>'],
+                        tasks: ['livereload']
                     }
                 },
                 githubpublish: {
@@ -280,6 +284,11 @@
             'livereload-start',
             'connect:livereload',
             'watch'
+        ]);
+
+        grunt.registerTask('serve:dist', [
+            'connect:dist',
+            'watch:dist'
         ]);
 
         grunt.registerTask('build', [
