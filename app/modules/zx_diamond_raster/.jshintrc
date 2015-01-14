@@ -21,9 +21,8 @@
   "loopfunc": true,
   "globals": {
     "_": true,
-    "zxCanvas":true,
     "zxBackbone":true,
-    "zxDiamondRaster":true,
-    "Backbone":true
+    "zxCanvas":true,
+    "zxDiamondRaster":true
   }
 }
