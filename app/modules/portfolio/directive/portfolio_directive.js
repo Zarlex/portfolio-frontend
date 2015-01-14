@@ -67,17 +67,80 @@
 
                     layers.add(imageLayer);
 
+                    imageLayer.get('image').on('change:imageLoaded', function(){
+                        var circles = diamondRasterLayer.getCircles();
+
+                        setTimeout(function(){
+                            circles[0].forEach(function (diamond) {
+                                zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:700});
+                            });
+
+                            zxCanvas.animationQueue.attributes.on('change:animating',function(model,animating){
+                                if(!animating){
+                                    zxCanvas.animationQueue.attributes.off('change:animating');
+                                    circles[1].forEach(function (diamond) {
+                                        zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:700});
+                                    });
+
+                                    zxCanvas.animationQueue.attributes.on('change:animating',function(model,animating){
+                                        if(!animating){
+                                            zxCanvas.animationQueue.attributes.off('change:animating');
+                                            circles[2].forEach(function (diamond) {
+                                                zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:700});
+                                            });
+
+                                            zxCanvas.animationQueue.attributes.on('change:animating',function(model,animating){
+                                                if(!animating){
+                                                    zxCanvas.animationQueue.attributes.off('change:animating');
+                                                    circles[3].forEach(function (diamond) {
+                                                        zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:700});
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                }
+                            });
+                        },1000);
+
+                        //setTimeout(function(){
+                        //    circles[1].forEach(function (diamond) {
+                        //        zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:10000});
+                        //    });
+                        //},1100);
+                        //
+                        //setTimeout(function(){
+                        //    circles[2].forEach(function (diamond) {
+                        //        zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:10000});
+                        //    });
+                        //},1200);
+                        //
+                        //setTimeout(function(){
+                        //    circles[3].forEach(function (diamond) {
+                        //        zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:10000});
+                        //    });
+                        //},1300);
+                        //
+                        //setTimeout(function(){
+                        //    circles[4].forEach(function (diamond) {
+                        //        zxCanvas.animationQueue.add({model:diamond.get('color'), attributes:{alpha:0}, duration:10000});
+                        //    });
+                        //},1400);
+
+                    });
+
                     scope.$watch('opacity', function (value) {
                         if (value) {
-                            var circles = diamondRasterLayer.getCircles();
-
-                            circles[0].forEach(function (diamond) {
-                                diamond.set({color: {alpha: value / 100}});
-                            });
-
-                            circles[2].forEach(function (diamond) {
-                                diamond.set({color: {alpha: value / 100}});
-                            });
+                        //    var circles = diamondRasterLayer.getCircles();
+                        //
+                        //    circles[0].forEach(function (diamond) {
+                        //        diamond.set({color: {alpha: value / 100}});
+                        //    });
+                        //
+                        //    circles[2].forEach(function (diamond) {
+                        //        diamond.set({color: {alpha: value / 100}});
+                        //    });
                         }
                     });
                 }
