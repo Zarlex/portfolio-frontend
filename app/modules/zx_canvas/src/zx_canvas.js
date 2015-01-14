@@ -21,9 +21,7 @@
     // @include ./canvas/polygon.js
     // @include ./canvas/polygons.js
 
-    // @include ./animation_queue/animation_object.js
-    // @include ./animation_queue/animation_queue_attributes.js
-    // @include ./animation_queue/animation_queue.js
+
 
     root.zxCanvas = zxCanvas;
 
