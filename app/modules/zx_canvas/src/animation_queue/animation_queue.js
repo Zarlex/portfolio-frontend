@@ -11,7 +11,7 @@ var AnimationQueue = zxBackbone.Collection.extend({
         if (this.length > 0) {
             var self = this;
 
-            this.attributes.set('anmiating',true);
+            this.attributes.set('animating',true);
             window.requestAnimationFrame(function () {
                 self.forEach(function(animationObject){
                     if(animationObject.animationHasFinished()){
