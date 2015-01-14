@@ -270,6 +270,9 @@
                     },
                     diamonds: {
                         command: 'cd app/modules/zx_diamond_raster; grunt;'
+                    },
+                    timeline: {
+                        command: 'cd app/modules/zx_timeline; grunt;'
                     }
                 }
             }
