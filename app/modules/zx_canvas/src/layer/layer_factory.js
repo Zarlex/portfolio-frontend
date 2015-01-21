@@ -32,10 +32,6 @@ var LayerFactory = function (canvas) {
 
         layer = new Layer(attributes);
 
-        layer.on('change:rendering change:globalCompositeOperation', function () {
-            _canvas.prepareToRender();
-        });
-
         _canvas.attributes.on('change:width change:height', function () {
             layer.set(_getCanvasSize());
         });
