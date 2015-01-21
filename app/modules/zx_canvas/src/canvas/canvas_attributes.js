@@ -10,10 +10,9 @@ var CanvasAttributes = zxBackbone.NestedModel.extend({
             height: 200
         };
     },
-
     nested: function(){
         return {
-            layers: zxCanvas.Layers
+            layerGroup: zxCanvas.LayerGroup
         };
     }
 });
