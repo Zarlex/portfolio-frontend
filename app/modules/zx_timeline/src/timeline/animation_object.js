@@ -18,9 +18,9 @@ var AnimationObject = zxBackbone.Model.extend({
             startValues = {},
             model = this.get('model');
 
-        _.keys(animateToAttributes).forEach(function(key){
+        _.keys(animateToAttributes).forEach(function (key) {
             var startValue = model.get(key);
-            if(!_.isUndefined(startValue)){
+            if (!_.isUndefined(startValue)) {
                 startValues[key] = startValue;
             }
         });
@@ -33,21 +33,19 @@ var AnimationObject = zxBackbone.Model.extend({
             offset = this.get('offset'),
             duration = this.get('duration'),
             startValue = this.get('startValues')[property],
-            offsetFrame = frame-offset,
+            offsetFrame = frame - offset,
             deltaValue,
             newValue;
 
-        if(offsetFrame >= 0 && !_.isUndefined(startValue)){
+        if (offsetFrame >= 0 && !_.isUndefined(startValue)) {
             deltaValue = ( ( Math.abs(animateToValue - startValue)) / duration ) * offsetFrame;
-            deltaValue = Math.round(deltaValue*1000)/1000;
+            deltaValue = Math.round(deltaValue * 1000) / 1000;
 
-            if(animateToValue>=startValue){
-              newValue = startValue + deltaValue;
+            if (animateToValue >= startValue) {
+                newValue = startValue + deltaValue;
             } else {
-              newValue = startValue - deltaValue;
+                newValue = startValue - deltaValue;
             }
-
-            console.log('Set '+property, newValue);
 
             model.set(property, newValue);
         }
@@ -56,9 +54,12 @@ var AnimationObject = zxBackbone.Model.extend({
     tick: function (frame) {
         var animateToAttributes = this.get('animateToAttributes');
 
-        _.pairs(animateToAttributes).forEach(function(pair){
-            this.animateProperty(pair[0], pair[1], frame);
-        },this);
+        _.pairs(animateToAttributes).forEach(function (pair) {
+            var key = pair[0],
+                value = pair[1];
+
+            this.animateProperty(key, value, frame);
+        }, this);
     }
 });
 
