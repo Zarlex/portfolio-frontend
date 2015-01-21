@@ -11,9 +11,8 @@
     // @include ./layer/polygon_layer.js
     // @include ./layer/image_layer.js
     // @include ./layer/layer_factory.js
+    // @include ./layer/layer_group.js
 
-    // @include ./canvas/canvas_attributes.js
-    // @include ./canvas/canvas.js
     // @include ./canvas/color.js
     // @include ./canvas/coordinate.js
     // @include ./canvas/coordinates.js
@@ -21,8 +20,9 @@
     // @include ./canvas/polygon.js
     // @include ./canvas/polygons.js
 
-
-
+    // @include ./canvas/canvas_attributes.js
+    // @include ./canvas/canvas.js
+    
     root.zxCanvas = zxCanvas;
 
 }(this));
