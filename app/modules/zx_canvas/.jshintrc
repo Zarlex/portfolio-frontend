@@ -21,7 +21,8 @@
   "loopfunc": true,
   "globals": {
     "_": true,
-    "zxBackbone":true,
-    "zxCanvas":true
+    "Backbone": true,
+    "zxBackbone": true,
+    "zxCanvas": true
   }
 }
