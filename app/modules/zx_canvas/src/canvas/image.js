@@ -11,7 +11,8 @@ var zxImage = zxBackbone.NestedModel.extend({
          imageLoaded: false,
          width: null,
          height: null,
-         context: null
+         context: null,
+         blur: false
      };
     },
 
@@ -33,12 +34,26 @@ var zxImage = zxBackbone.NestedModel.extend({
 
     render: function (context) {
         var renderRectangle = this.getRenderRectangle(),
-            imageInstance = this.get('imageInstance');
+            context = this.get('context'),
+            imageInstance = this.get('imageInstance'),
+            imageLoaded = this.get('imageLoaded'),
+            blur = this.get('blur');
 
-        if(this.get('imageLoaded')){
-            context.drawImage(imageInstance, renderRectangle[0], renderRectangle[1], renderRectangle[2], renderRectangle[3]);
+        if(imageLoaded){
+            if(blur){
+                window.stackBlurImage(imageInstance, context, blur.radius, blur.preserveAlpha);
+            } else {
+                context.drawImage(imageInstance, renderRectangle[0], renderRectangle[1], renderRectangle[2], renderRectangle[3]);
+            }
         }
 
+    },
+
+    blur: function(radius, preserveAlpha){
+        this.set('blur', {radius: radius, preserveAlpha: preserveAlpha});
+        if(!this.get('rendering')){
+            this.render();
+        }
     },
 
     _getWidthAndHeight: function(){
@@ -69,7 +84,11 @@ var zxImage = zxBackbone.NestedModel.extend({
         }
         this.set('imageLoaded',false);
         imageInstance.onload = function(){
-            var context = self.get('context');
+            var context = self.get('context'),
+                widthAndHeight = self._getWidthAndHeight();
+
+            imageInstance.width = widthAndHeight[0];
+            imageInstance.height = widthAndHeight[1];
 
             self.set('imageLoaded',true);
             self.render(context);
