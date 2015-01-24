@@ -34,7 +34,6 @@ var zxImage = zxBackbone.NestedModel.extend({
 
     render: function (context) {
         var renderRectangle = this.getRenderRectangle(),
-            context = this.get('context'),
             imageInstance = this.get('imageInstance'),
             imageLoaded = this.get('imageLoaded'),
             blur = this.get('blur');
