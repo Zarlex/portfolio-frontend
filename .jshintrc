@@ -27,6 +27,7 @@
         "Backbone": true,
         "zxBackbone": true,
         "zxCanvas": true,
-        "zxDiamondRaster":true
+        "zxDiamondRaster":true,
+        "zxTimeline":true
     }
 }
