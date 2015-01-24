@@ -33,7 +33,7 @@
   <!-- endbuild -->
 
 </head>
-<body ng-cloak>
+<body ng-cloak class="loading">
 <!--[if lt IE 7]>
 <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser
   today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better
@@ -51,7 +51,13 @@
 <div ng-view append-class-according-to-route></div>
 
 <div class="diamond-raster">
-  <input type="range" ng-model="model.circleOpacity" min="0" max="100" style="position: relative; z-index: 10">
+  <div class="logo-holder">
+      <span class="loading">Loading</span>
+      <div class="logo">
+          <img src="modules/portfolio/images/logo_z.png" class="z">
+          <img src="modules/portfolio/images/logo_bg.png" class="bg">
+      </div>
+  </div>
   <div zx-canvas opacity="model.circleOpacity"></div>
 </div>
 <footer></footer>
@@ -65,6 +71,8 @@
 <script src="components/backbone/backbone.js"></script>
 <script src="components/moment/min/moment.min.js"></script>
 <script src="components/moment/min/lang/de.js"></script>
+<script src="vendor/stack_blur_for_canvas.js"></script>
+
 <script src="modules/zx_backbone/dist/zx_backbone.js"></script>
 <script src="modules/zx_canvas/dist/zx_canvas.js"></script>
 <script src="modules/zx_timeline/dist/zx_timeline.js"></script>

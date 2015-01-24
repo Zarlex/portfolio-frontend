@@ -5,3 +5,56 @@
   left: 0;
   height: 0;
 }
+
+.logo-holder{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  z-index: 9;
+  width:388px;
+  height:388px;
+
+  .loading {
+    position: absolute;
+    top: 47%;
+    text-align: center;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 30px;
+    color: #3f3f3f;
+    opacity:0;
+    z-index: 9;
+    -webkit-transition: opacity 0.5s ease;
+  }
+
+  .logo{
+    position: relative;
+
+    .z{
+      position: absolute;
+      z-index: 1;
+      opacity: 1;
+      -webkit-transition: opacity 0.5s ease;
+    }
+
+    .bg{
+      position: absolute;
+    }
+  }
+}
+
+body.loading{
+  .logo-holder{
+    .loading{
+      opacity: 1;
+    }
+
+    .logo .z{
+      opacity:0;
+    }
+  }
+}
+
