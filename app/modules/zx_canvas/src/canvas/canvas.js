@@ -15,13 +15,11 @@ var Canvas = Backbone.View.extend({
     },
 
     setCanvasSize: function () {
-        console.log('SET CANVAS')
         this.el.width = this.attributes.get('width');
         this.el.height = this.attributes.get('height');
     },
 
     setSize: function(width, height){
-        console.log('set size',width,height)
         var layerGroup = this.attributes.get('layerGroup');
 
         this.attributes.set('width', width);
