@@ -103,7 +103,8 @@
                         'Gruntfile.js',
                         '<%= yeoman.app %>/modules/**/{,*/}*.js',
                         '!<%= yeoman.app %>/modules/**/node_modules/**/{,*/}*.js',
-                        '!<%= yeoman.app %>/modules/**/src/**/{,*/}*.js'
+                        '!<%= yeoman.app %>/modules/**/src/**/{,*/}*.js',
+                        '!<%= yeoman.app %>/vendor/**/{,*/}*.js'
                     ]
                 },
                 compass: {
