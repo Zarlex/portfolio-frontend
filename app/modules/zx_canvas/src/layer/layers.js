@@ -3,7 +3,7 @@
  */
 
 var Layers = zxBackbone.Collection.extend({
-    comparator: 'zIndex',
+    comparator: '-zIndex',
 
     setSize: function (width, height) {
         this.forEach(function (layer) {
