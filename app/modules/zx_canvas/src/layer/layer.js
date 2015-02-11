@@ -8,7 +8,7 @@ var Layer = zxBackbone.NestedModel.extend({
         return {
             globalCompositeOperation: 'source-over',
             canvas: null,
-            rendering: false,
+            isRendering: false,
             globalAlpha: 1,
             width: 0,
             height: 0
@@ -29,23 +29,8 @@ var Layer = zxBackbone.NestedModel.extend({
         return [position.get('x'), position.get('y'), width, height];
     },
 
-    render: function (context) {
-        return context;
-    },
+    renderLayer: function () {
 
-    prepareToRender: function () {
-        if (!this.get('rendering')) {
-            this.set('rendering', true);
-            var self = this,
-                context = this.get('canvas').getContext('2d'),
-                start = +new Date();
-            window.requestAnimationFrame(function () {
-                console.log('Start Rendering Layer:', self.get('id'));
-                self.render(context);
-                console.log('Finished Rendering Layer:', self.get('id'), (+new Date()) - start);
-                self.set('rendering', false);
-            });
-        }
     },
 
     setSize: function (width, height) {
@@ -56,13 +41,17 @@ var Layer = zxBackbone.NestedModel.extend({
     setCanvasSize: function () {
         this.get('canvas').width = this.get('width');
         this.get('canvas').height = this.get('height');
-        this.prepareToRender();
+        this.askForRendering();
+    },
+
+    askForRendering: function () {
+        console.log('%c' + this.get('name') + ' needs rendering', 'color:orange; font-weight:bold');
+        this.set('needsRendering', true);
     },
 
     constructor: function () {
         var constructor = zxBackbone.NestedModel.prototype.constructor.apply(this, arguments);
 
-        this.on('change:globalCompositeOperation change:globalAlpha change:position', this.prepareToRender, this);
         this.on('change:width change:height', this.setCanvasSize, this);
 
         return constructor;
