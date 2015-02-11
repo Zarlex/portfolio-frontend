@@ -15,24 +15,35 @@ var PolygonLayer = zxCanvas.Layer.extend({
         return this.get('polygons').getRenderRectangle();
     },
 
-    render: function (context) {
-        var renderRectangle = this.getRenderRectangle();
+    renderLayer: function () {
+        var context = this.get('canvas').getContext('2d'),
+            polygons = this.get('polygons'),
+            isRendering = this.get('isRendering');
 
-        context.clearRect.apply(context, this._lastRenderRectangle);
+        if(!isRendering){
+            this.set('isRendering', true);
+            this.set('needsRendering', false);
 
-        this.get('polygons').each(function (polygon) {
-            polygon.render(context);
-        }, this);
+            context.clearRect.apply(context, this._lastRenderRectangle);
+            console.log('%cRender '+ this.get('name'),'color:blue; font-weight:bold');
+            polygons.render(context);
 
-        this._lastRenderRectangle = renderRectangle;
+            this._lastRenderRectangle = this.getRenderRectangle();
+
+            this.set('isRendering', false);
+            this.set('needsRendering', false);
+        }
     },
 
     constructor: function () {
 
-        zxCanvas.Layer.prototype.constructor.apply(this,arguments);
-        this.on('change:polygons', function () {
-            this.prepareToRender();
+        var superConstructor = zxCanvas.Layer.prototype.constructor.apply(this,arguments);
+
+        this.on('add change:polygons', function () {
+            this.askForRendering();
         }, this);
+
+        return superConstructor;
     }
 });
 
