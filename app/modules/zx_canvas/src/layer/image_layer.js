@@ -5,8 +5,8 @@
 var ImageLayer = zxCanvas.Layer.extend({
 
     nested: function () {
-        var nested = zxCanvas.Layer.prototype.nested.apply(this,arguments);
-        return _.extend(nested,{
+        var nested = zxCanvas.Layer.prototype.nested.apply(this, arguments);
+        return _.extend(nested, {
             image: zxCanvas.Image
         });
     },
@@ -15,45 +15,40 @@ var ImageLayer = zxCanvas.Layer.extend({
         return this.get('image').getRenderRectangle();
     },
 
-    prepareToRender: function(){
+    renderLayer: function () {
         var context = this.get('canvas').getContext('2d'),
             image = this.get('image'),
-            self = this;
+            isRendering = this.get('isRendering');
 
-        if(image.get('imageLoaded') && !this.get('rendering')){
-            var start = +new Date();
+        if (!isRendering) {
+            this.set('isRendering', true);
+            context.clearRect.apply(context, this._lastRenderRectangle);
+            console.log('%cRender '+ this.get('name'),'color:blue; font-weight:bold');
+            image.render(context);
 
-            this.set('rendering', true);
+            this._lastRenderRectangle = this.getRenderRectangle();
 
-            window.requestAnimationFrame(function () {
-                console.log('Start Rendering Layer:',self.get('id'),'IMAGE');
-                self.render(context);
-                console.log('Finished Rendering Layer:',self.get('id'),(+new Date())-start,'IMAGE');
-                self.set('rendering', false);
-            });
+            this.set('isRendering', false);
+            this.set('needsRendering', false);
+
         }
     },
 
-    render: function (context) {
-        var image = this.get('image'),
-            renderRectangle = this.getRenderRectangle();
+    askForRendering: function () {
+        var imageLoaded = this.get('image').get('imageLoaded');
 
-        context.clearRect.apply(context,  this._lastRenderRectangle);
-
-        image.render(context);
-
-        this._lastRenderRectangle = renderRectangle;
+        if (imageLoaded) {
+            return zxCanvas.Layer.prototype.askForRendering.apply(this);
+        }
     },
 
     constructor: function () {
 
-        zxCanvas.Layer.prototype.constructor.apply(this,arguments);
+        var superConstructor = zxCanvas.Layer.prototype.constructor.apply(this, arguments);
 
-        this.on('change:image', function () {
-            this.prepareToRender();
-        }, this);
+        this.on('change:image:imageLoaded', this.askForRendering, this);
 
-        this.get('image').set('context',this.get('canvas').getContext('2d'));
+        return superConstructor;
     }
 });
 
