@@ -36,6 +36,12 @@ var Polygons = zxBackbone.Collection.extend({
 
             return [startX, startY, width, height];
         }
+    },
+
+    render: function(context){
+        this.each(function(polygon){
+            polygon.render(context);
+        });
     }
 
 });
