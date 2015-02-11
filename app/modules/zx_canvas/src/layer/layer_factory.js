@@ -4,8 +4,7 @@
 
 var LayerFactory = function (canvas) {
 
-    var _canvas = canvas,
-        _zIndex = 0;
+    var _canvas = canvas;
 
     var _getCanvasSize = function () {
         return {
@@ -23,8 +22,7 @@ var LayerFactory = function (canvas) {
 
         attributes = _.extend({
                 id: layerId,
-                canvas: canvas[0],
-                zIndex: _zIndex++
+                canvas: canvas[0]
             },
             _getCanvasSize(),
             attributes
