@@ -5,9 +5,10 @@
 var CanvasAttributes = zxBackbone.NestedModel.extend({
     defaults: function () {
         return {
-            rendering: false,
             width: 200,
-            height: 200
+            height: 200,
+            canvasIsRendering: false,
+            canvasIsCompositing: false
         };
     },
     nested: function(){
