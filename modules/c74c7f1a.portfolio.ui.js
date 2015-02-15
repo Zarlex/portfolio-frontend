@@ -1,1 +1,0 @@
-angular.module("Portfolio").run(["$templateCache",function(a){"use strict";a.put("modules/start/template/start.html","")}]);
