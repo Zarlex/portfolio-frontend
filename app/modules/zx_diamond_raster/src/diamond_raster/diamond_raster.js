@@ -10,7 +10,8 @@ var DiamondRaster = zxCanvas.PolygonLayer.extend({
                 rowAmount: 0,
                 columnAmount: 0,
                 diamondWidth: 0,
-                diamondHeight: 0
+                diamondHeight: 0,
+                name: 'DIAMONDRASTER'
             });
         },
 
@@ -100,6 +101,17 @@ var DiamondRaster = zxCanvas.PolygonLayer.extend({
                     polygons.add(diamond);
                 }
             }
+        },
+
+        setSize: function (width, height) {
+            this.set('width', width);
+            this.set('height', height);
+        },
+
+        setCanvasSize: function () {
+            this.get('canvas').width = this.get('width');
+            this.get('canvas').height = this.get('height');
+            this.askForRendering();
         },
 
         constructor: function () {
