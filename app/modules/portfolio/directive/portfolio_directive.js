@@ -26,12 +26,28 @@
                             width: angular.element(document).width(),
                             height: angular.element(document).height()
                         },
+                        diamondSize = {
+                            width: 240,
+                            height: 240
+                        },
+                        rowAmount = Math.floor(windowSize.height / diamondSize.height) + 2,
+                        columnAmount = Math.floor(windowSize.width / diamondSize.width) + 2,
+                        centerOffset = {
+                            left: (columnAmount * diamondSize.width - windowSize.width) / 2,
+                            top: (rowAmount * diamondSize.height - windowSize.height) / 2
+                        },
                         layerFactory = new zxCanvas.LayerFactory(canvas),
                         imageLayer = layerFactory.createLayer(zxCanvas.ImageLayer, {
                             image: {
                                 src: '/modules/portfolio/images/gaellnoe.png',
-                                width: 300
+                                width: windowSize.width
                             }, name: 'IMAGELAYER'
+                        }),
+                        imageLayer2 = layerFactory.createLayer(zxCanvas.ImageLayer, {
+                            image: {
+                                src: '/modules/portfolio/images/gaellnoe.png',
+                                width: windowSize.width
+                            }, blur: 20, bAndW: true, globalAlpha: 1, name: 'IMAGELAYER 2'
                         }),
                         layerGroup = layerFactory.createLayer(zxCanvas.LayerGroup, {name: 'LAYERGROUP1'}),
                         layerGroup1 = layerFactory.createLayer(zxCanvas.LayerGroup, {name: 'LAYERGROUP2'}),
@@ -48,36 +64,72 @@
                         }),
                         diamondRasterLayer = layerFactory.createLayer(
                             zxDiamondRaster.DiamondRaster, {
-                                rowAmount: 5,
-                                columnAmount: 5,
-                                diamondHeight: 200,
-                                diamondWidth: 200,
+                                rowAmount: rowAmount,
+                                columnAmount: columnAmount,
+                                diamondHeight: diamondSize.height,
+                                diamondWidth: diamondSize.width,
                                 position: {
-                                    x: 0,
-                                    y: 0
-                                },
-                                name: 'DIAMONDRASTERLAYER'
+                                    x: centerOffset.left * -1,
+                                    y: centerOffset.top * -1
+                                }
                             }
                         ),
+                        diamondRasterCircles = diamondRasterLayer.getCircles(),
                         timeLine = new zxTimeline.Timeline();
 
-                    layerGroup2.addLayer(diamondRasterLayer);
                     layerGroup1.addLayer(layerGroup2);
                     layerGroup.addLayer(layerGroup1);
                     //canvas.addLayer(diamondRasterLayer);
                     canvas.addLayer(layerGroup);
                     canvas.addLayer(imageLayer);
+                    canvas.addLayer(imageLayer2);
+                    canvas.addLayer(diamondRasterLayer);
 
-                    canvas.setSize(windowSize.width, windowSize.height);
+
 
                     layerGroup1.addLayer(layer1);
                     layerGroup1.addLayer(layer2);
-                    imageLayer.set('globalAlpha', 0.9);
+                    //imageLayer.set('globalAlpha', 0.9);
+                    //timeLine.add(layer1.get('polygons').first().get('color'), {red: 0, blue:255}, 100);
+                    timeLine.add(imageLayer2, {globalAlpha: 1}, 100);
+                    //timeLine.play();
+                    canvas.setSize(windowSize.width, windowSize.height);
+                    diamondRasterLayer.set('globalCompositeOperation', 'destination-in');
 
-                    timeLine.add(layer1.get('polygons').first().get('color'), {red: 0, blue:255}, 100);
+                    diamondRasterCircles.reverse().forEach(function (circle, circleIndex) {
+                        circle.forEach(function (diamond) {
+                            diamond.set('color', {alpha: 0});
+                            timeLine.add(diamond.get('color'), {alpha: 1}, {
+                                duration: 20,
+                                offset: 5 * circleIndex
+                            });
+                        });
+                    });
+
+                    window.setBAndW = function (setIt) {
+                        imageLayer2.set('bAndW', setIt);
+                        imageLayer2.askForRendering();
+                    };
+
+                    window.setBlur = function (blur) {
+                        imageLayer2.set('blur', blur);
+                        imageLayer2.askForRendering();
+                    };
+
+
+                    angular.element('body').on('click', function (event) {
+                        var xPercentage = (30 / windowSize.width) * event.clientX;
+                        imageLayer2.set('blur', Math.round(xPercentage));
+                        imageLayer2.set('bAndW', !imageLayer2.get('bAndW'));
+                        imageLayer2.askForRendering();
+                    });
 
                     timeLine.play();
 
+                    imageLayer.get('image').on('change:imageLoaded', function () {
+                        angular.element('body').removeClass('loading');
+                        //diamondRasterCircleStartTimeline.play();
+                    });
 
                     //var canvas = new zxCanvas.Canvas({el: el}),
                     //    layerFactory = new zxCanvas.LayerFactory(canvas),
