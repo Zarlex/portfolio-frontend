@@ -24,7 +24,7 @@ var LayerGroup = zxBackbone.NestedModel.extend({
     nested: function () {
         return {
             position: zxCanvas.Coordinate,
-            effects: zxBackbone.Collection,
+            filters: zxCanvas.Filters,
             layers: zxCanvas.Layers
         };
     },
@@ -45,6 +45,12 @@ var LayerGroup = zxBackbone.NestedModel.extend({
         layers.add(layer);
 
         this.set('currentZIndex', ++currentZIndex);
+    },
+
+    addFilter: function(filter){
+        var filters = this.get('filters');
+
+        filters.add(filter);
     },
 
     layersAreReadyToPostRender: function () {
@@ -172,7 +178,7 @@ var LayerGroup = zxBackbone.NestedModel.extend({
 
     postCompositeLayerGroup: function(){
         var isPostCompositing = this.get('isPostCompositing'),
-            effects = this.get('effects'),
+            filters = this.get('filters'),
             context = this.get('canvas').getContext('2d'),
             width = this.get('width'),
             height = this.get('height'),
@@ -181,8 +187,8 @@ var LayerGroup = zxBackbone.NestedModel.extend({
         if (!isPostCompositing) {
             this.set('isPostCompositing', true);
             console.log('%c' + this.get('name') + ' is postcompositing', 'color:grey; font-weight:bold');
-            effects.each(function (effect) {
-                effect.apply(context, position.get('x'), position.get('y'), width, height);
+            filters.each(function (filter) {
+                filter.prepare(context, position.get('x'), position.get('y'), width, height);
             });
             this.set('isPostCompositing', false);
             this.set('needsPostCompositing', false);
@@ -235,7 +241,7 @@ var LayerGroup = zxBackbone.NestedModel.extend({
         var superConstructor = zxCanvas.Layer.prototype.constructor.apply(this, arguments),
             layers = this.get('layers');
 
-        layers.on('change:needsRendering', this.askForRendering, this);
+        layers.on('add change:needsRendering', this.askForRendering, this);
         layers.on('change:globalCompositeOperation change:globalAlpha change:position change:effects', this.askForPostRendering, this);
         layers.on('change:isPostRendering change:needsCompositing', this.askForCompositing, this);
 

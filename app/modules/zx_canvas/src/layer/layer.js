@@ -14,25 +14,31 @@ var Layer = zxBackbone.NestedModel.extend({
             needsPostRendering: false,
             globalAlpha: 1,
             width: 0,
-            height: 0,
-            blur: 0,
-            bAndW: false
+            height: 0
         };
     },
 
     nested: function () {
         return {
             position: zxCanvas.Coordinate,
-            effects: zxBackbone.Collection
+            filters: zxCanvas.Filters
         };
+    },
+
+    addFilter: function(filter){
+        var filters = this.get('filters');
+
+        filters.add(filter);
     },
 
     getRenderRectangle: function () {
         var width = this.get('width'),
             height = this.get('height'),
-            position = this.get('position');
+            position = this.get('position'),
+            x = position.get('x'),
+            y = position.get('y');
 
-        return [position.get('x'), position.get('y'), width, height];
+        return [x, y, width, height];
     },
 
     renderLayer: function () {
@@ -43,18 +49,16 @@ var Layer = zxBackbone.NestedModel.extend({
         var isRendering = this.get('isRendering'),
             needsPostRendering = this.get('needsPostRendering'),
             isPostRendering = this.get('isPostRendering'),
-            effects = this.get('effects'),
+            filters = this.get('filters'),
             context = this.get('canvas').getContext('2d'),
-            width = this.get('width'),
-            height = this.get('height'),
-            position = this.get('position');
+            renderRectangle = this.getRenderRectangle();
 
         if (!isRendering && needsPostRendering && !isPostRendering) {
             this.set('isPostRendering', true);
             console.log('%c' + this.get('name') + ' is postrendering', 'color:lila; font-weight:bold');
-            effects.each(function (effect) {
-                effect.apply(context, position.get('x'), position.get('y'), width, height);
-            });
+            filters.each(function (filter) {
+                filter.prepare(context, renderRectangle[0], renderRectangle[1], renderRectangle[2], renderRectangle[3]);
+            }, this);
             this.set('isPostRendering', false);
             this.set('needsPostRendering', false);
         }
