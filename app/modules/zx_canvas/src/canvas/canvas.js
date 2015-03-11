@@ -42,10 +42,10 @@ var Canvas = Backbone.View.extend({
 
         if (needsRendering && !isRendering && !canvasIsRendering) {
             this.attributes.set('canvasIsRendering', true);
+            this.attributes.set('canvasIsPostRendering', true);
+            this.attributes.set('canvasIsCompositing', true);
+            this.attributes.set('canvasIsPostCompositing', true);
             window.requestAnimationFrame(function () {
-                this.attributes.set('canvasIsPostRendering', true);
-                this.attributes.set('canvasIsCompositing', true);
-                this.attributes.set('canvasIsPostCompositing', true);
                 layerGroup.renderLayers();
                 layerGroup.postRenderLayers();
                 layerGroup.compositeLayers();
@@ -61,14 +61,14 @@ var Canvas = Backbone.View.extend({
     postRenderCanvas: function(){
         var layerGroup = this.attributes.get('layerGroup'),
             needsPostRendering = layerGroup.get('needsPostRendering'),
-            isPostRendering = layerGroup.get('isCompositing'),
+            isPostRendering = layerGroup.get('isPostRendering'),
             canvasIsPostRendering = this.attributes.get('canvasIsPostRendering');
 
         if(needsPostRendering && !isPostRendering && !canvasIsPostRendering){
             this.attributes.set('canvasIsPostRendering', true);
+            this.attributes.set('canvasIsCompositing', true);
+            this.attributes.set('canvasIsPostCompositing', true);
             window.requestAnimationFrame(function () {
-                this.attributes.set('canvasIsCompositing', true);
-                this.attributes.set('canvasIsPostCompositing', true);
                 layerGroup.postRenderLayers();
                 layerGroup.compositeLayers();
                 layerGroup.postCompositeLayerGroups();
@@ -87,8 +87,8 @@ var Canvas = Backbone.View.extend({
 
         if(needsCompositing && !isCompositing && !canvasIsCompositing){
             this.attributes.set('canvasIsCompositing', true);
+            this.attributes.set('canvasIsPostCompositing', true);
             window.requestAnimationFrame(function () {
-                this.attributes.set('canvasIsPostCompositing', true);
                 layerGroup.compositeLayers.call(layerGroup);
                 layerGroup.postCompositeLayerGroups();
                 this.attributes.set('canvasIsCompositing', false);
