@@ -40,28 +40,11 @@
                         imageLayer = layerFactory.createLayer(zxCanvas.ImageLayer, {
                             image: {
                                 src: '/modules/portfolio/images/gaellnoe.png',
-                                width: windowSize.width
+                                width: windowSize.width,
+                                position: {y:-150}
                             }, name: 'IMAGELAYER'
                         }),
-                        imageLayer2 = layerFactory.createLayer(zxCanvas.ImageLayer, {
-                            image: {
-                                src: '/modules/portfolio/images/gaellnoe.png',
-                                width: windowSize.width
-                            }, blur: 20, bAndW: true, globalAlpha: 1, name: 'IMAGELAYER 2'
-                        }),
-                        layerGroup = layerFactory.createLayer(zxCanvas.LayerGroup, {name: 'LAYERGROUP1'}),
-                        layerGroup1 = layerFactory.createLayer(zxCanvas.LayerGroup, {name: 'LAYERGROUP2'}),
-                        layerGroup2 = layerFactory.createLayer(zxCanvas.LayerGroup, {name: 'LAYERGROUP3'}),
-                        layer1 = layerFactory.createLayer(zxCanvas.PolygonLayer, {
-                            polygons: [
-                                new zxDiamondRaster.Diamond({width: 500, height: 500, color: {red: 255}})
-                            ], name: 'LAYER1'
-                        }),
-                        layer2 = layerFactory.createLayer(zxCanvas.PolygonLayer, {
-                            polygons: [
-                                new zxDiamondRaster.Diamond({width: 100, height: 100, color: {red: 255}})
-                            ], name: 'LAYER2'
-                        }),
+                        blurFilter = new zxCanvas.filters.BlurFilter({radius: 20, alpha:false}),
                         diamondRasterLayer = layerFactory.createLayer(
                             zxDiamondRaster.DiamondRaster, {
                                 rowAmount: rowAmount,
@@ -74,62 +57,82 @@
                                 }
                             }
                         ),
+                        diamondRasterLayer2 = layerFactory.createLayer(
+                            zxDiamondRaster.DiamondRaster, {
+                                rowAmount: rowAmount,
+                                columnAmount: columnAmount,
+                                diamondHeight: diamondSize.height,
+                                diamondWidth: diamondSize.width,
+                                position: {
+                                    x: centerOffset.left * -1,
+                                    y: centerOffset.top * -1
+                                }
+                            }
+                        ),
                         diamondRasterCircles = diamondRasterLayer.getCircles(),
+                        diamondRasterCircles2 = diamondRasterLayer2.getCircles(),
                         timeLine = new zxTimeline.Timeline();
 
-                    layerGroup1.addLayer(layerGroup2);
-                    layerGroup.addLayer(layerGroup1);
-                    //canvas.addLayer(diamondRasterLayer);
-                    canvas.addLayer(layerGroup);
                     canvas.addLayer(imageLayer);
-                    canvas.addLayer(imageLayer2);
                     canvas.addLayer(diamondRasterLayer);
+                    canvas.addLayer(diamondRasterLayer2);
 
 
-
-                    layerGroup1.addLayer(layer1);
-                    layerGroup1.addLayer(layer2);
-                    //imageLayer.set('globalAlpha', 0.9);
-                    //timeLine.add(layer1.get('polygons').first().get('color'), {red: 0, blue:255}, 100);
-                    timeLine.add(imageLayer2, {globalAlpha: 1}, 100);
-                    //timeLine.play();
                     canvas.setSize(windowSize.width, windowSize.height);
-                    diamondRasterLayer.set('globalCompositeOperation', 'destination-in');
+                    diamondRasterLayer.setSize(windowSize.width+centerOffset.left, windowSize.height+centerOffset.top);
+                    diamondRasterLayer2.setSize(windowSize.width+centerOffset.left, windowSize.height+centerOffset.top);
 
-                    diamondRasterCircles.reverse().forEach(function (circle, circleIndex) {
-                        circle.forEach(function (diamond) {
+                    imageLayer.addFilter(blurFilter);
+                    //diamondRasterLayer.addFilter(blurFilter);
+
+                    diamondRasterLayer.set('globalCompositeOperation', 'destination-in');
+                    diamondRasterLayer2.set('globalCompositeOperation', 'screen');
+
+                    diamondRasterCircles.forEach(function (circle, circleIndex) {
+                        circle.forEach(function (diamond, diamondIndex) {
+                            var diamond2 = diamondRasterCircles2[circleIndex][diamondIndex],
+                                duration = Math.floor(Math.random() * (circleIndex*8+10 - circleIndex*4)) + circleIndex* 4,
+                                colorTone = Math.floor(Math.random() * (40-10)) + 10;
+
                             diamond.set('color', {alpha: 0});
+                            diamond2.set('color', {alpha: 0, red:colorTone,blue:colorTone,green:colorTone});
+
                             timeLine.add(diamond.get('color'), {alpha: 1}, {
-                                duration: 20,
-                                offset: 5 * circleIndex
+                                duration: duration,
+                                offset: 5*circleIndex
+                            });
+                            timeLine.add(diamond2.get('color'), {alpha: 1}, {
+                                duration: duration,
+                                offset: duration+10
                             });
                         });
                     });
 
-                    window.setBAndW = function (setIt) {
-                        imageLayer2.set('bAndW', setIt);
-                        imageLayer2.askForRendering();
-                    };
-
+                    //window.setBAndW = function (setIt) {
+                    //    imageLayer2.set('bAndW', setIt);
+                    //    imageLayer2.askForRendering();
+                    //};
+                    //
                     window.setBlur = function (blur) {
-                        imageLayer2.set('blur', blur);
-                        imageLayer2.askForRendering();
+                        blurFilter.set('radius', blur);
                     };
-
-
+                    //
+                    //
                     angular.element('body').on('click', function (event) {
                         var xPercentage = (30 / windowSize.width) * event.clientX;
-                        imageLayer2.set('blur', Math.round(xPercentage));
-                        imageLayer2.set('bAndW', !imageLayer2.get('bAndW'));
-                        imageLayer2.askForRendering();
+                        window.setBlur(Math.round(xPercentage));
                     });
-
-                    timeLine.play();
 
                     imageLayer.get('image').on('change:imageLoaded', function () {
                         angular.element('body').removeClass('loading');
-                        //diamondRasterCircleStartTimeline.play();
+                        timeLine.play();
                     });
+                    //
+                    //
+                    //imageLayer.get('image').on('change:imageLoaded', function () {
+                    //    angular.element('body').removeClass('loading');
+                    //    //diamondRasterCircleStartTimeline.play();
+                    //});
 
                     //var canvas = new zxCanvas.Canvas({el: el}),
                     //    layerFactory = new zxCanvas.LayerFactory(canvas),
