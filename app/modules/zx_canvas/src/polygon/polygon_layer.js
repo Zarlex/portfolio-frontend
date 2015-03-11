@@ -22,7 +22,6 @@ var PolygonLayer = zxCanvas.Layer.extend({
 
         if(!isRendering){
             this.set('isRendering', true);
-            this.set('needsRendering', false);
 
             context.clearRect.apply(context, this._lastRenderRectangle);
             console.log('%cRender '+ this.get('name'),'color:blue; font-weight:bold');
@@ -42,7 +41,7 @@ var PolygonLayer = zxCanvas.Layer.extend({
         this.on('add change:polygons', function () {
             this.askForRendering();
         }, this);
-
+        
         return superConstructor;
     }
 });

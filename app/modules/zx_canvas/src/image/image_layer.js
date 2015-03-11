@@ -25,10 +25,6 @@ var ImageLayer = zxCanvas.Layer.extend({
             context.clearRect.apply(context, this._lastRenderRectangle);
             console.log('%cRender '+ this.get('name'),'color:blue; font-weight:bold');
             image.render(context);
-            window.stackBlurImage2(context, 0, 0, this.get('width'), this.get('height'),this.get('blur'));
-            if(this.get('bAndW')){
-                window.blackAndWhiteImage(context, 0, 0, this.get('width'), this.get('height'),this.get('blur'));
-            }
             this._lastRenderRectangle = this.getRenderRectangle();
 
             this.set('isRendering', false);
